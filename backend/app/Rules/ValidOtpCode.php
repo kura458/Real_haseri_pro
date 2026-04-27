@@ -15,6 +15,8 @@ class ValidOtpCode implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        //
+        if (!is_string($value) || strlen($value) !== 6 || !is_numeric($value)) {
+            $fail('OTP must be exactly 6 digits.');
+        }
     }
 }
