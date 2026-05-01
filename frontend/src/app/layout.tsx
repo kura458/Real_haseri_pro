@@ -8,7 +8,7 @@ import { Inter, Poppins, Fira_Mono, Geist } from "next/font/google";
 // Shadcn providers
 import { TooltipProvider } from "../components/ui/tooltip";
 import { Toaster } from "../components/ui/sonner";
-import { AuthProvider, QueryProvider } from "../providers";
+import { AuthProvider, QueryProvider} from "../providers"
 import { cn } from "@/src/lib/utils";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});

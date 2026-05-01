@@ -1,9 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-
 @custom-variant dark (&:is(.dark *));
-
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -49,99 +47,99 @@
 }
 
 :root {
-  /* Bondex Custom Colors - Light Mode */
-  --background: #F3F2F0;
-  --foreground: #1E293B;
+  /* Haseri Brand Colors - Light Mode */
+  --background: #F8FAFC;
+  --foreground: #0F172A;
   
   --card: #FFFFFF;
-  --card-foreground: #1E293B;
+  --card-foreground: #0F172A;
   
   --popover: #FFFFFF;
-  --popover-foreground: #1E293B;
+  --popover-foreground: #0F172A;
   
-  --primary: #2C4E6F;
+  --primary: #E11D48; /* Reddish Brand Color */
   --primary-foreground: #FFFFFF;
   
-  --secondary: #5F82AA;
-  --secondary-foreground: #FFFFFF;
+  --secondary: #F8FAFC;
+  --secondary-foreground: #0F172A;
   
   --muted: #F1F5F9;
   --muted-foreground: #64748B;
   
-  --accent: #D5DEE7;
-  --accent-foreground: #2C4E6F;
+  --accent: #FFF1F2; /* Soft red accent */
+  --accent-foreground: #E11D48;
   
-  --destructive: #EF4444;
+  --destructive: #DC2626;
   --destructive-foreground: #FFFFFF;
   
-  --border: #D1D9E0;
-  --input: #D1D9E0;
-  --ring: #8BAACF;
+  --border: #E2E8F0;
+  --input: #E2E8F0;
+  --ring: #FB7185;
   
-  --chart-1: #2C4E6F;
-  --chart-2: #5F82AA;
-  --chart-3: #8BAACF;
-  --chart-4: #D5DEE7;
+  --chart-1: #E11D48;
+  --chart-2: #F43F5E;
+  --chart-3: #FB7185;
+  --chart-4: #FDA4AF;
   --chart-5: #334155;
   
-  --radius: 0.625rem;
+  --radius: 0.75rem;
   
   /* Sidebar Colors - Light Mode */
   --sidebar: #FFFFFF;
-  --sidebar-foreground: #1E293B;
-  --sidebar-primary: #5F82AA;
+  --sidebar-foreground: #0F172A;
+  --sidebar-primary: #E11D48;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #F1F5F9;
-  --sidebar-accent-foreground: #1E293B;
-  --sidebar-border: #C3CDD6;
-  --sidebar-ring: #8BAACF;
+  --sidebar-accent: #FFF1F2;
+  --sidebar-accent-foreground: #E11D48;
+  --sidebar-border: #E2E8F0;
+  --sidebar-ring: #FB7185;
 }
 
 .dark {
-  /* Bondex Custom Colors - Dark Mode */
-  --background: #0F172A;
-  --foreground: #E2E8F0;
+  /* Haseri Brand Colors - Dark Mode */
+  --background: #020617;
+  --foreground: #F8FAFC;
   
-  --card: #1E293B;
-  --card-foreground: #E2E8F0;
+  --card: #0F172A;
+  --card-foreground: #F8FAFC;
   
-  --popover: #1E293B;
-  --popover-foreground: #E2E8F0;
+  --popover: #0F172A;
+  --popover-foreground: #F8FAFC;
   
-  --primary: #5F82AA;
+  --primary: #F43F5E;
   --primary-foreground: #FFFFFF;
   
-  --secondary: #2C4E6F;
-  --secondary-foreground: #FFFFFF;
+  --secondary: #1E293B;
+  --secondary-foreground: #F8FAFC;
   
-  --muted: #334155;
+  --muted: #1E293B;
   --muted-foreground: #94A3B8;
   
-  --accent: #2C4E6F;
-  --accent-foreground: #E2E8F0;
+  --accent: #4C0519;
+  --accent-foreground: #F43F5E;
   
   --destructive: #EF4444;
   --destructive-foreground: #FFFFFF;
   
-  --border: #334155;
-  --input: #334155;
-  --ring: #8BAACF;
+  --border: #1E293B;
+  --input: #1E293B;
+  --ring: #FB7185;
   
-  --chart-1: #5F82AA;
-  --chart-2: #8BAACF;
-  --chart-3: #2C4E6F;
-  --chart-4: #475569;
+  --chart-1: #F43F5E;
+  --chart-2: #FB7185;
+  --chart-3: #E11D48;
+  --chart-4: #9F1239;
   --chart-5: #94A3B8;
   
   /* Sidebar Colors - Dark Mode */
-  --sidebar: #1E293B;
-  --sidebar-foreground: #E2E8F0;
-  --sidebar-primary: #5F82AA;
+  --sidebar: #0F172A;
+  --sidebar-foreground: #F8FAFC;
+  --sidebar-primary: #F43F5E;
   --sidebar-primary-foreground: #FFFFFF;
-  --sidebar-accent: #334155;
-  --sidebar-accent-foreground: #E2E8F0;
-  --sidebar-border: #334155;
-  --sidebar-ring: #8BAACF;
+  --sidebar-accent: #1E293B;
+  --sidebar-accent-foreground: #F43F5E;
+  --sidebar-border: #1E293B;
+  --sidebar-ring: #FB7185;
 }
 
 @layer base {
