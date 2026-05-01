@@ -17,12 +17,14 @@ class Application
 
             echo json_encode(['app' => 'Haseri API']);
             
-        } catch (HttpException $e) {
+        }
+         catch (HttpException $e) {
             http_response_code($e->getStatusCode());
             echo json_encode(['error' => $e->getMessage()]);
         } catch (\Throwable $e) {
             http_response_code(500);
             echo json_encode(['error' => 'Internal Server Error']);
         }
+
     }
 }
