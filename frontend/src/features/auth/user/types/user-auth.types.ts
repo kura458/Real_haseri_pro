@@ -1,5 +1,15 @@
 export type UserRole = "customer" | "provider";
 
+export interface User {
+  id: string | number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone?: string;
+  role: UserRole;
+  avatar?: string;
+}
+
 export type LoginInput = {
   email?: string;
   phone?: string;
