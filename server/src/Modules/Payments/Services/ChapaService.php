@@ -19,6 +19,7 @@ class ChapaService
             'Authorization: Bearer ' . $this->secretKey,
             'Content-Type: application/json',
         ]);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         $response = curl_exec($ch);
         curl_close($ch);
         return json_decode($response, true);
@@ -31,6 +32,7 @@ class ChapaService
         curl_setopt($ch, CURLOPT_HTTPHEADER, [
             'Authorization: Bearer ' . $this->secretKey,
         ]);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         $response = curl_exec($ch);
         curl_close($ch);
         return json_decode($response, true);

@@ -1,63 +1,64 @@
 <?php
 namespace Haseri\Backend\Modules\Payments\Services;
 
-use Haseri\Backend\Shared\Models\Payment;
-
 class PaymentService
 {
-    private $chapa;
+    private $secretKey;
 
     public function __construct()
     {
-        $this->chapa = new ChapaService();
+        $this->secretKey = $_ENV['CHAPA_SECRET_KEY'] ?? '';
     }
 
     public function initiate(array $data)
     {
-        $txRef = 'haseri_' . uniqid() . '_' . time();
-
-        $response = $this->chapa->initialize([
-            'amount' => $data['amount'],
-            'currency' => 'ETB',
-            'email' => $data['email'],
-            'first_name' => $data['first_name'] ?? 'Customer',
-            'last_name' => $data['last_name'] ?? 'Haseri',
-            'tx_ref' => $txRef,
-            'callback_url' => $_ENV['APP_URL'] . '/api/payment/callback',
-            'return_url' => $_ENV['FRONTEND_URL'] . '/payment/success',
-            'customization' => [
-                'title' => $data['title'] ?? 'Haseri Payment',
-                'description' => $data['description'] ?? 'Payment',
-            ],
+        $ch = curl_init('https://api.chapa.co/v1/transaction/initialize');
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $this->secretKey,
+            'Content-Type: application/json',
         ]);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $response = curl_exec($ch);
+        $error = curl_error($ch);
+        curl_close($ch);
 
-        if ($response['status'] === 'success') {
-            Payment::create([
-                'user_id' => $data['user_id'],
-                'payment_type' => $data['payment_type'],
-                'related_id' => $data['related_id'] ?? null,
-                'amount' => $data['amount'],
-                'chapa_tx_ref' => $txRef,
-                'status' => 'pending',
-            ]);
-
-            return ['checkout_url' => $response['data']['checkout_url'], 'tx_ref' => $txRef];
+        if ($response === false) {
+            return ['status' => 'error', 'message' => $error];
         }
 
-        return $response;
+        $decoded = json_decode($response, true);
+        return $decoded ?? ['status' => 'error', 'message' => 'Invalid JSON response'];
     }
 
     public function verifyAndConfirm(string $txRef)
     {
-        $response = $this->chapa->verify($txRef);
+        $ch = curl_init('https://api.chapa.co/v1/transaction/verify/' . $txRef);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Authorization: Bearer ' . $this->secretKey,
+        ]);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $response = curl_exec($ch);
+        $error = curl_error($ch);
+        curl_close($ch);
 
-        if ($response['status'] === 'success') {
-            Payment::where('chapa_tx_ref', $txRef)->update([
-                'status' => 'paid',
-                'chapa_transaction_id' => $response['data']['id'] ?? null,
-            ]);
+        if ($response === false) {
+            return ['status' => 'error', 'message' => $error];
         }
 
-        return $response;
+        $decoded = json_decode($response, true);
+        return $decoded ?? ['status' => 'error', 'message' => 'Invalid JSON response'];
+    }
+
+    public function verify(string $txRef)
+    {
+        return $this->verifyAndConfirm($txRef);
+    }
+
+    public function initialize(array $data)
+    {
+        return $this->initiate($data);
     }
 }
