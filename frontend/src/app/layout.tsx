@@ -11,6 +11,8 @@ import { Toaster } from "../components/ui/sonner";
 import { AuthProvider, QueryProvider} from "../providers"
 import { cn } from "@/src/lib/utils";
 
+import { CookieConsentBanner } from "@/src/home/CookieConsentBanner";
+
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const inter = Inter({
@@ -61,6 +63,7 @@ export default function RootLayout({
           <AuthProvider>
             <TooltipProvider>
               {children}
+              <CookieConsentBanner />
               <Toaster richColors position="top-right" closeButton />
             </TooltipProvider>
           </AuthProvider>
