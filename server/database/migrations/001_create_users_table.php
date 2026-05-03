@@ -17,4 +17,3 @@ DB::schema()->create('users', function ($table) {
     $table->timestamps();
 });
 
-echo "✅ users table created\n";
