@@ -10,4 +10,3 @@ DB::schema()->create('admin_otps', function ($table) {
     $table->timestamp('created_at')->useCurrent();
 });
 
-echo "✅ admin_otps table created\n";

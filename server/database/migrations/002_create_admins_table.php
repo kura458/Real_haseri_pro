@@ -11,4 +11,3 @@ DB::schema()->create('admins', function ($table) {
     $table->timestamps();
 });
 
-echo "✅ admins table created\n";

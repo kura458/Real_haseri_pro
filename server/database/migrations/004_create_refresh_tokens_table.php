@@ -10,4 +10,3 @@ DB::schema()->create('refresh_tokens', function ($table) {
     $table->boolean('revoked')->default(false);
     $table->timestamps();
 });
-echo "✅ refresh_tokens table created\n";
