@@ -39,9 +39,7 @@ export const useGoogleRoleSelection = (storageKey = "haseri:register:google") =>
         sessionStorage.removeItem(storageKey);
         router.push("/dashboard");
       } catch (err: any) {
-        console.error("Google role selection error:", err);
-        const message = err?.message || "Google sign-in failed";
-        setGoogleRoleError(message);
+        setGoogleRoleError(err?.message || "Google sign-in failed. Please try again.");
       } finally {
         setGoogleRoleLoading(false);
       }

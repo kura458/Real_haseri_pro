@@ -7,7 +7,11 @@ import { Button } from "@/src/components/ui/button";
 import { Menu, X, Search, Bell } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+import { useAuth } from "@/src/hooks/useAuth";
+import { UserMenu } from "@/src/features/shared/components";
+
 export const Navbar = () => {
+  const { isAuthenticated } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -68,13 +72,27 @@ export const Navbar = () => {
           <Button variant="ghost" size="icon" className="text-foreground/70 hover:text-primary">
             <Search className="w-5 h-5" />
           </Button>
+          
           <div className="h-4 w-px bg-border/60 mx-1" />
-          <Button variant="ghost" className="rounded-none font-bold uppercase text-xs tracking-widest" asChild>
-            <Link href="/login">Login</Link>
-          </Button>
-          <Button className="rounded-none px-5 h-10 bg-primary hover:bg-primary/90 text-white font-bold uppercase text-xs tracking-widest shadow-none border-2 border-primary transition-all active:scale-95" asChild>
-            <Link href="/register">Get Started</Link>
-          </Button>
+
+          {isAuthenticated ? (
+            <div className="flex items-center gap-4">
+              <Button variant="ghost" size="icon" className="text-foreground/70 hover:text-primary relative">
+                <Bell className="w-5 h-5" />
+                <span className="absolute top-2 right-2 w-2 h-2 bg-primary rounded-full" />
+              </Button>
+              <UserMenu />
+            </div>
+          ) : (
+            <>
+              <Button variant="ghost" className="rounded-none font-bold uppercase text-xs tracking-widest" asChild>
+                <Link href="/login">Login</Link>
+              </Button>
+              <Button className="rounded-none px-5 h-10 bg-primary hover:bg-primary/90 text-white font-bold uppercase text-xs tracking-widest shadow-none border-2 border-primary transition-all active:scale-95" asChild>
+                <Link href="/register">Get Started</Link>
+              </Button>
+            </>
+          )}
         </div>
 
         {/* Mobile Toggle */}
@@ -108,12 +126,18 @@ export const Navbar = () => {
               ))}
               <div className="h-px bg-border my-2" />
               <div className="flex flex-col gap-4">
-                <Button variant="outline" className="rounded-none w-full h-14 border-2 border-foreground font-bold uppercase tracking-widest" asChild>
-                  <Link href="/login">Login</Link>
-                </Button>
-                <Button className="rounded-none w-full h-14 bg-primary text-white font-bold uppercase tracking-widest" asChild>
-                  <Link href="/register/customer">Join Now</Link>
-                </Button>
+                {isAuthenticated ? (
+                  <UserMenu />
+                ) : (
+                  <>
+                    <Button variant="outline" className="rounded-none w-full h-14 border-2 border-foreground font-bold uppercase tracking-widest" asChild>
+                      <Link href="/login">Login</Link>
+                    </Button>
+                    <Button className="rounded-none w-full h-14 bg-primary text-white font-bold uppercase tracking-widest" asChild>
+                      <Link href="/register/customer">Join Now</Link>
+                    </Button>
+                  </>
+                )}
               </div>
             </div>
           </motion.div>

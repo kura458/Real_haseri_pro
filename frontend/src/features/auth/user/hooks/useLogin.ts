@@ -20,8 +20,7 @@ export const useLogin = () => {
       setUser(res.data.data.user);
       router.push("/dashboard");
     } catch (err: any) {
-      const message = err?.message || "Login failed";
-      setError(message);
+      setError(err?.message || "Login failed. Please check your credentials.");
     } finally {
       setLoading(false);
     }

@@ -11,6 +11,7 @@ import { RegisterInput, UserRole } from "../types";
 import { emailSchema, phoneSchema, passwordSchema } from "@/src/utils/validators";
 import { getRequiredSchemaError, getSchemaError } from "@/src/utils/validators/form";
 import { PasswordStrengthMeter } from "@/src/components/auth/PasswordStrengthMeter";
+import { FormField } from "@/src/features/shared/components";
 
 interface RegisterFormProps {
   role?: UserRole;
@@ -150,8 +151,12 @@ export const RegisterForm = ({
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground/80">First Name</label>
+            <FormField
+              label="First Name"
+              error={errors.first_name}
+              touched={touched.first_name}
+              required
+            >
               <Input
                 name="first_name"
                 placeholder="John"
@@ -160,14 +165,13 @@ export const RegisterForm = ({
                 onBlur={() => setTouched((prev) => ({ ...prev, first_name: true }))}
                 className="rounded-none border border-border h-12 focus-visible:ring-0 focus-visible:border-primary transition-all bg-background/50 hover:border-primary/50"
               />
-              {touched.first_name && errors.first_name && (
-                <p className="text-[10px] text-destructive font-semibold uppercase tracking-wider">
-                  {errors.first_name}
-                </p>
-              )}
-            </div>
-            <div className="space-y-2">
-              <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground/80">Last Name</label>
+            </FormField>
+            <FormField
+              label="Last Name"
+              error={errors.last_name}
+              touched={touched.last_name}
+              required
+            >
               <Input
                 name="last_name"
                 placeholder="Doe"
@@ -176,16 +180,15 @@ export const RegisterForm = ({
                 onBlur={() => setTouched((prev) => ({ ...prev, last_name: true }))}
                 className="rounded-none border border-border h-12 focus-visible:ring-0 focus-visible:border-primary transition-all bg-background/50 hover:border-primary/50"
               />
-              {touched.last_name && errors.last_name && (
-                <p className="text-[10px] text-destructive font-semibold uppercase tracking-wider">
-                  {errors.last_name}
-                </p>
-              )}
-            </div>
+            </FormField>
           </div>
 
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground/80">Email Address</label>
+          <FormField
+            label="Email Address"
+            error={errors.email}
+            touched={touched.email}
+            required
+          >
             <div className="relative group">
               <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors">
                 <Mail className="w-4 h-4" />
@@ -200,15 +203,13 @@ export const RegisterForm = ({
                 className="rounded-none border border-border h-12 pl-12 focus-visible:ring-0 focus-visible:border-primary transition-all bg-background/50 hover:border-primary/50"
               />
             </div>
-            {touched.email && errors.email && (
-              <p className="text-[10px] text-destructive font-semibold uppercase tracking-wider">
-                {errors.email}
-              </p>
-            )}
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground/80">Phone (Optional)</label>
+          <FormField
+            label="Phone (Optional)"
+            error={errors.phone || errors.credential}
+            touched={touched.phone || touched.email}
+          >
             <div className="relative group">
               <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors flex items-center gap-2">
                 <div className="flex items-center gap-1.5 border-r border-border pr-2">
@@ -235,21 +236,15 @@ export const RegisterForm = ({
                 className="rounded-none border border-border h-12 pl-24 focus-visible:ring-0 focus-visible:border-primary transition-all bg-background/50 hover:border-primary/50"
               />
             </div>
-            {touched.phone && errors.phone && (
-              <p className="text-[10px] text-destructive font-semibold uppercase tracking-wider">
-                {errors.phone}
-              </p>
-            )}
-            {touched.email && touched.phone && errors.credential && (
-              <p className="text-[10px] text-destructive font-semibold uppercase tracking-wider">
-                {errors.credential}
-              </p>
-            )}
-          </div>
+          </FormField>
 
-          <div className="space-y-2">
-            <label className="text-[10px] font-bold uppercase tracking-[0.2em] text-foreground/80">Security</label>
-            <div className="grid grid-cols-1 gap-4">
+          <div className="space-y-6">
+            <FormField
+              label="Password"
+              error={errors.password}
+              touched={touched.password}
+              required
+            >
               <div className="relative group">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors">
                   <Lock className="w-4 h-4" />
@@ -264,12 +259,16 @@ export const RegisterForm = ({
                   className="rounded-none border border-border h-12 pl-12 focus-visible:ring-0 focus-visible:border-primary transition-all bg-background/50 hover:border-primary/50"
                 />
               </div>
-              <PasswordStrengthMeter password={formData.password} />
-              {touched.password && errors.password && (
-                <p className="text-[10px] text-destructive font-semibold uppercase tracking-wider">
-                  {errors.password}
-                </p>
-              )}
+            </FormField>
+
+            <PasswordStrengthMeter password={formData.password} />
+
+            <FormField
+              label="Confirm Password"
+              error={errors.confirmPassword}
+              touched={touched.confirmPassword}
+              required
+            >
               <div className="relative group">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors">
                   <Lock className="w-4 h-4" />
@@ -284,12 +283,7 @@ export const RegisterForm = ({
                   className="rounded-none border border-border h-12 pl-12 focus-visible:ring-0 focus-visible:border-primary transition-all bg-background/50 hover:border-primary/50"
                 />
               </div>
-              {touched.confirmPassword && errors.confirmPassword && (
-                <p className="text-[10px] text-destructive font-semibold uppercase tracking-wider">
-                  {errors.confirmPassword}
-                </p>
-              )}
-            </div>
+            </FormField>
           </div>
 
           {formError && (

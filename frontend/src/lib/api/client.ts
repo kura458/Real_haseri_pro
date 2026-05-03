@@ -34,10 +34,17 @@ clientApi.interceptors.response.use(
       };
 
       const message = payload?.error || error.message || "Something went wrong";
+      
+      const userFriendlyMessage = message === "Network Error" 
+        ? "Unable to connect to our servers. Please check your internet connection."
+        : message;
 
-      return Promise.reject({ message, errors: payload?.errors });
+      const apiError = new Error(userFriendlyMessage);
+      (apiError as any).errors = payload?.errors;
+      (apiError as any).status = error.response?.status;
+      return Promise.reject(apiError);
     }
 
-    return Promise.reject({ message: "Something went wrong" });
+    return Promise.reject(new Error("An unexpected error occurred. Please try again."));
   }
 );

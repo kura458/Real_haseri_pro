@@ -24,9 +24,7 @@ export const useRegister = () => {
       setUser(res.data.data.user);
       router.push("/dashboard");
     } catch (err: any) {
-      console.error("Registration error:", err);
-      const message = err?.message || "Registration failed";
-      setError(message);
+      setError(err?.message || "Registration failed. Please try again.");
     } finally {
       setLoading(false);
     }
