@@ -2,17 +2,22 @@
 
 import { type ReactNode, useEffect, useState } from "react";
 import { clientApi } from "../lib/api/client";
-import { useAuthStore} from "../stores/authStore";
+import { useAuthStore } from "../stores/authStore";
 
 type AuthProviderProps = {
   children: ReactNode;
 };
 
 export const AuthProvider = ({ children }: AuthProviderProps) => {
-  const { setUser, setAdmin, user, admin } = useAuthStore();
+  const { user, admin, setUser, setAdmin } = useAuthStore();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (user || admin) {
+      setLoading(false);
+      return;
+    }
+
     const checkAuth = async () => {
       try {
         // Try user first
@@ -32,7 +37,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     };
 
     checkAuth();
-  }, []);
+  }, [user, admin, setUser, setAdmin]);
 
   if (loading) return null;
 

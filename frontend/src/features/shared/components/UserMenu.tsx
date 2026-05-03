@@ -13,24 +13,42 @@ import {
   DropdownMenuTrigger,
 } from "@/src/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar";
-import { 
-  User, 
-  Settings, 
-  LogOut, 
-  LayoutDashboard, 
-  ShieldCheck,
-  UserCircle,
-  ChevronDown
-} from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import { LogOut, LayoutDashboard, ShieldCheck, UserCircle, ChevronDown } from "lucide-react";
+import { motion } from "framer-motion";
 import { cn } from "@/src/lib/utils";
 
+const MenuAvatar = ({
+  src,
+  alt,
+  initials,
+  className,
+  showStatus,
+}: {
+  src?: string | null;
+  alt: string;
+  initials: string;
+  className: string;
+  showStatus?: boolean;
+}) => (
+  <div className="relative">
+    <Avatar className={cn("rounded-none border-2 border-slate-900/10 bg-white", className)}>
+      {src ? <AvatarImage src={src} alt={alt} className="object-cover" /> : null}
+      <AvatarFallback className="rounded-none bg-slate-900 text-white font-black text-xs tracking-tighter">
+        {initials}
+      </AvatarFallback>
+    </Avatar>
+    {showStatus ? (
+      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-primary border-2 border-white rounded-none" />
+    ) : null}
+  </div>
+);
+
 export const UserMenu = () => {
-  const { user, logout, isAuthenticated, isAdmin, adminLogout } = useAuth();
+  const { user, logout, isAdmin, adminLogout } = useAuth();
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  if (!isAuthenticated || (!user && !isAdmin)) return null;
+  if (!user && !isAdmin) return null;
 
   const handleLogout = () => {
     if (isAdmin) {
@@ -41,22 +59,11 @@ export const UserMenu = () => {
     router.push("/login");
   };
 
-  const getInitials = () => {
-    if (isAdmin) return "AD";
-    const first = user?.first_name?.[0] || "";
-    const last = user?.last_name?.[0] || "";
-    return (first + last).toUpperCase() || "U";
-  };
-
-  const getDisplayName = () => {
-    if (isAdmin) return "Administrator";
-    return `${user?.first_name} ${user?.last_name}`;
-  };
-
-  const getIdentifier = () => {
-    if (isAdmin) return "Admin Portal";
-    return user?.email || user?.phone || "User Account";
-  };
+  const initials = isAdmin
+    ? "AD"
+    : `${user?.first_name?.[0] || ""}${user?.last_name?.[0] || ""}`.toUpperCase() || "U";
+  const displayName = isAdmin ? "Administrator" : `${user?.first_name} ${user?.last_name}`;
+  const identifier = isAdmin ? "Admin Portal" : user?.email || user?.phone || "User Account";
 
   const dashboardHref = isAdmin 
     ? "/admin/dashboard" 
@@ -81,19 +88,17 @@ export const UserMenu = () => {
                 : "bg-transparent border-transparent hover:border-border/60 hover:bg-white/50"
             )}
           >
-            <div className="relative">
-              <Avatar className="h-10 w-10 rounded-none border-2 border-slate-900/10 group-hover:border-slate-900 transition-colors duration-300">
-                <AvatarImage src={user?.avatar} alt={getDisplayName()} />
-                <AvatarFallback className="rounded-none bg-slate-900 text-white font-black text-xs tracking-tighter">
-                  {getInitials()}
-                </AvatarFallback>
-              </Avatar>
-              <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-primary border-2 border-white rounded-none" />
-            </div>
+            <MenuAvatar
+              src={user?.avatar}
+              alt={displayName}
+              initials={initials}
+              className="h-10 w-10 group-hover:border-slate-900 transition-colors duration-300"
+              showStatus
+            />
 
             <div className="hidden lg:flex flex-col items-start mr-2">
               <span className="text-[11px] font-black uppercase tracking-[0.15em] text-slate-900 leading-tight">
-                {getDisplayName()}
+                {displayName}
               </span>
               <span className="text-[9px] text-muted-foreground font-bold uppercase tracking-widest leading-tight">
                 {user?.role || "Admin"}
@@ -115,18 +120,18 @@ export const UserMenu = () => {
           {/* Header Area - Clean White Style */}
           <div className="p-6 bg-white border-b border-slate-100">
             <div className="flex items-center gap-4 mb-4">
-              <Avatar className="h-12 w-12 rounded-none border border-slate-900/20">
-                <AvatarImage src={user?.avatar} />
-                <AvatarFallback className="rounded-none bg-slate-50 text-slate-900 font-black">
-                  {getInitials()}
-                </AvatarFallback>
-              </Avatar>
+              <MenuAvatar
+                src={user?.avatar}
+                alt={displayName}
+                initials={initials}
+                className="h-12 w-12 border border-slate-900/20"
+              />
               <div className="overflow-hidden">
                 <DropdownMenuLabel className="p-0 font-black uppercase tracking-widest text-[13px] text-slate-900 truncate">
-                  {getDisplayName()}
+                  {displayName}
                 </DropdownMenuLabel>
                 <p className="text-[10px] font-bold text-muted-foreground truncate uppercase tracking-tight">
-                  {getIdentifier()}
+                  {identifier}
                 </p>
               </div>
             </div>

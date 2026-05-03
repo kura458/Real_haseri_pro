@@ -17,6 +17,16 @@ export const useLogin = () => {
     setError(null);
     try {
       const res = await userAuthApi.login(data);
+      const token =
+        res.data?.data?.access_token ||
+        res.data?.data?.token ||
+        res.data?.data?.tokens?.access_token ||
+        null;
+
+      if (typeof window !== "undefined" && token) {
+        window.localStorage.setItem("haseri_access_token", token);
+      }
+
       setUser(res.data.data.user);
       router.push("/dashboard");
     } catch (err: any) {

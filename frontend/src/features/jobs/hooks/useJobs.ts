@@ -20,5 +20,17 @@ export const useJobs = () => {
     }
   }, []);
 
-  return { jobs, loading, getJobs };
+  const getMyJobs = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await jobsApi.getMine();
+      setJobs(res.data.data);
+    } catch {
+      //
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  return { jobs, loading, getJobs, getMyJobs };
 };

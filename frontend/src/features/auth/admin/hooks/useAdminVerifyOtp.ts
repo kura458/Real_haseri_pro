@@ -17,6 +17,16 @@ export const useAdminVerifyOtp = () => {
     setError(null);
     try {
       const res = await adminAuthApi.verifyOtp(data);
+      const token =
+        res.data?.data?.access_token ||
+        res.data?.data?.token ||
+        res.data?.data?.tokens?.access_token ||
+        null;
+
+      if (typeof window !== "undefined" && token) {
+        window.localStorage.setItem("haseri_access_token", token);
+      }
+
       setAdmin(res.data.data.admin);
       router.push("/admin/dashboard");
     } catch (err: unknown) {

@@ -40,5 +40,41 @@ export const useCustomerProfile = () => {
     }
   };
 
-  return { fetchProfile, update, loading, error };
+  const uploadAvatar = async (file: File) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const formData = new FormData();
+      formData.append("avatar", file);
+      const res = await customersApi.updateAvatar(formData);
+      setUser(res.data.data);
+      return res.data.data;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Avatar upload failed";
+      setError(message);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const uploadCover = async (file: File) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const formData = new FormData();
+      formData.append("cover_image", file);
+      const res = await customersApi.updateCover(formData);
+      setUser(res.data.data);
+      return res.data.data;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : "Cover upload failed";
+      setError(message);
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return { fetchProfile, update, uploadAvatar, uploadCover, loading, error };
 };

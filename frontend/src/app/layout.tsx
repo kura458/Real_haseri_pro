@@ -9,9 +9,9 @@ import { Inter, Poppins, Fira_Mono, Geist } from "next/font/google";
 import { TooltipProvider } from "../components/ui/tooltip";
 import { Toaster } from "../components/ui/sonner";
 import { AuthProvider, QueryProvider} from "../providers"
-import { cn } from "@/src/lib/utils";
+import { cn } from "../lib/utils";
 
-import { CookieConsentBanner } from "@/src/components/home/CookieConsentBanner";
+import { CookieConsentBanner } from "../components/home";
 
 const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 

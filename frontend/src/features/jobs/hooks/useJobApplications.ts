@@ -2,10 +2,27 @@
 
 import { useState } from "react";
 import { jobsApi } from "../services";
+import type { JobApplication } from "../types";
 
 export const useJobApplications = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [applications, setApplications] = useState<JobApplication[]>([]);
+
+  const getApplications = async (jobId: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await jobsApi.getApplications(jobId);
+      setApplications(res.data.data);
+      return res.data.data;
+    } catch (err: unknown) {
+      setError("Failed to fetch applications");
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const apply = async (jobId: string, data?: { message?: string; proposed_price?: number }) => {
     setLoading(true);
@@ -23,12 +40,24 @@ export const useJobApplications = () => {
   };
 
   const accept = async (id: string) => {
-    await jobsApi.acceptApplication(id);
+    setLoading(true);
+    try {
+      await jobsApi.acceptApplication(id);
+      setApplications(prev => prev.map(app => app.id.toString() === id ? { ...app, status: 'accepted' } : app));
+    } finally {
+      setLoading(false);
+    }
   };
 
   const reject = async (id: string) => {
-    await jobsApi.rejectApplication(id);
+    setLoading(true);
+    try {
+      await jobsApi.rejectApplication(id);
+      setApplications(prev => prev.map(app => app.id.toString() === id ? { ...app, status: 'rejected' } : app));
+    } finally {
+      setLoading(false);
+    }
   };
 
-  return { apply, accept, reject, loading, error };
+  return { applications, getApplications, apply, accept, reject, loading, error };
 };

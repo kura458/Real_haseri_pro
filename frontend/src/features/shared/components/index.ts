@@ -3,6 +3,7 @@ export * from "./UserMenu";
 export * from "./DashboardSidebar";
 export * from "./DashboardHeader";
 export * from "./DashboardFooter";
+export * from "./CustomerTopNav";
 export * from "./EmptyState";
 export * from "./ErrorAlert";
 export * from "./LoadingSpinner";
