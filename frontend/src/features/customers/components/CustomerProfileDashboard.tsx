@@ -10,7 +10,7 @@ import {
   ProfileJobsList,
   ProfileApplicationsPanel
 } from "./";
-import { Container, Section } from "@/src/features/shared/components";
+import { Container, Section, SharedChatWidget } from "@/src/features/shared/components";
 import { Phone, MapPin, Shield } from "lucide-react";
 import { useAuth } from "@/src/hooks/useAuth";
 import { useCustomerProfile } from "@/src/features/customers/hooks/useCustomerProfile";
@@ -35,6 +35,12 @@ export function CustomerProfileDashboard() {
     }
   };
 
+  const totalJobs = jobs.length;
+  const activeJobs = React.useMemo(
+    () => jobs.filter((job) => job.status === "open").length,
+    [jobs]
+  );
+
   return (
     <Section padding="none" className="min-h-screen bg-slate-50 dark:bg-slate-950 pb-20 pt-6">
       <Container className="relative z-20 max-w-7xl mx-auto px-4 sm:px-6">
@@ -52,14 +58,12 @@ export function CustomerProfileDashboard() {
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-8 lg:gap-10">
           <div className="space-y-8">
-            <ProfileAnalytics 
-              totalJobs={jobs.length} 
-              activeJobs={jobs.filter(j => j.status === 'open').length} 
-            />
+            <ProfileAnalytics totalJobs={totalJobs} activeJobs={activeJobs} />
             <ProfileJobsList jobs={jobs} loading={jobsLoading} />
             <ProfileApplicationsPanel jobs={jobs} />
           </div>
           <div className="space-y-6">
+            <SharedChatWidget />
             <ProfileEditableAside
               title="Personal"
               icon={<Shield className="w-5 h-5" />}

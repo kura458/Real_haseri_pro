@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Heading } from "@/src/features/shared/components";
-import { Pencil, Check, X, Loader2 } from "lucide-react";
+import { Pencil, Check, Loader2 } from "lucide-react";
 import { Input } from "@/src/components/ui/input";
 import { Button } from "@/src/components/ui/button";
 import {

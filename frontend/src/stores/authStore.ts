@@ -1,7 +1,6 @@
 "use client";
 
 import { create } from "zustand";
-import { createJSONStorage, persist } from "zustand/middleware";
 
 interface User {
   id: number;
@@ -30,67 +29,41 @@ type AuthState = {
   adminLogout: () => void;
 };
 
-const ACCESS_TOKEN_KEY = "haseri_access_token";
+export const useAuthStore = create<AuthState>()((set) => ({
+  user: null,
+  admin: null,
+  isAuthenticated: false,
+  isAdmin: false,
 
-export const useAuthStore = create<AuthState>()(
-  persist(
-    (set) => ({
+  setUser: (user) =>
+    set({
+      user,
+      admin: null,
+      isAuthenticated: !!user,
+      isAdmin: false,
+    }),
+
+  setAdmin: (admin) =>
+    set({
+      admin,
+      user: null,
+      isAuthenticated: !!admin,
+      isAdmin: true,
+    }),
+
+  logout: () =>
+    set({
       user: null,
       admin: null,
       isAuthenticated: false,
       isAdmin: false,
-
-      setUser: (user) =>
-        set({
-          user,
-          admin: null,
-          isAuthenticated: !!user,
-          isAdmin: false,
-        }),
-
-      setAdmin: (admin) =>
-        set({
-          admin,
-          user: null,
-          isAuthenticated: !!admin,
-          isAdmin: true,
-        }),
-
-      logout: () => {
-        if (typeof window !== "undefined") {
-          window.localStorage.removeItem(ACCESS_TOKEN_KEY);
-        }
-
-        set({
-          user: null,
-          admin: null,
-          isAuthenticated: false,
-          isAdmin: false,
-        });
-      },
-
-      adminLogout: () => {
-        if (typeof window !== "undefined") {
-          window.localStorage.removeItem(ACCESS_TOKEN_KEY);
-        }
-
-        set({
-          user: null,
-          admin: null,
-          isAuthenticated: false,
-          isAdmin: false,
-        });
-      },
     }),
-    {
-      name: "haseri-auth",
-      storage: createJSONStorage(() => localStorage),
-      partialize: (state) => ({
-        user: state.user,
-        admin: state.admin,
-        isAuthenticated: state.isAuthenticated,
-        isAdmin: state.isAdmin,
-      }),
-    }
-  )
-);
+
+  adminLogout: () =>
+    set({
+      user: null,
+      admin: null,
+      isAuthenticated: false,
+      isAdmin: false,
+    }),
+}));

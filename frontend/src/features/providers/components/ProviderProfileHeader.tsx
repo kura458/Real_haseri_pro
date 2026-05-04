@@ -2,25 +2,22 @@
 
 import React, { useState } from "react";
 import { Heading } from "@/src/features/shared/components";
-import { Camera, MapPin, Phone, Mail, Shield, Loader2 } from "lucide-react";
-import { env } from "@/src/config";
+import { Camera, MapPin, Phone, Mail, Shield, Loader2, Pencil } from "lucide-react";
 import { useAuth } from "@/src/hooks/useAuth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar";
 import { providersApi } from "../services";
 import { toast } from "react-hot-toast";
-
-const resolveAvatarSrc = (src?: string | null) => {
-  if (!src) return null;
-  if (src.startsWith("http://") || src.startsWith("https://")) return src;
-  if (!env.BACKEND_ORIGIN) return src.startsWith("/") ? src : `/${src}`;
-  return src.startsWith("/") ? `${env.BACKEND_ORIGIN}${src}` : `${env.BACKEND_ORIGIN}/${src}`;
-};
+import { resolveAssetUrl } from "@/src/utils/resolve-asset-url";
+import { useProviderSkills } from "../hooks/useProviderSkills";
 
 export function ProviderProfileHeader() {
-  const { user } = useAuth();
+  const { user, setUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
-  const avatarSrc = resolveAvatarSrc(user?.avatar);
+  const avatarSrc = resolveAssetUrl(user?.avatar);
+  const { skills } = useProviderSkills();
+
+  const resolveUser = (payload: any) => payload?.data ?? payload?.user ?? payload?.data?.user ?? null;
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -30,8 +27,18 @@ export function ProviderProfileHeader() {
       const formData = new FormData();
       formData.append("avatar", file);
       const res = await providersApi.updateAvatar(formData);
-      if (res.data?.data) toast.success("Avatar updated");
-      else toast.error("Failed to update avatar");
+      const userData = resolveUser(res.data);
+      if (userData) setUser(userData);
+      if (!userData) {
+        try {
+          const profileRes = await providersApi.getProfile();
+          const refreshed = resolveUser(profileRes.data);
+          if (refreshed) setUser(refreshed);
+        } catch {
+          // ignore refresh failures
+        }
+      }
+      toast.success("Avatar updated");
     } catch {
       toast.error("Failed to update avatar");
     } finally {
@@ -82,6 +89,31 @@ export function ProviderProfileHeader() {
           )}
         </div>
 
+        {skills.length > 0 && (
+          <div className="mt-4">
+            <div className="flex items-center justify-between mb-2">
+              <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Skills</p>
+              <button
+                type="button"
+                className="p-1.5 rounded-full text-slate-400 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                aria-label="Edit skills"
+              >
+                <Pencil className="w-3.5 h-3.5" />
+              </button>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {skills.map((skill, idx) => (
+                <span
+                  key={idx}
+                  className="px-3 py-1 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 rounded-full text-[10px] font-black uppercase tracking-widest border border-slate-200 dark:border-slate-700"
+                >
+                  {skill}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
         <p className="text-sm font-semibold text-slate-600 dark:text-slate-400 max-w-lg mt-1">
           Technician on Haseri Marketplace
         </p>
@@ -90,8 +122,8 @@ export function ProviderProfileHeader() {
           <div className="flex items-center gap-1.5 text-slate-500">
             <MapPin className="w-3.5 h-3.5" />
             <span className="text-[11px] font-bold uppercase tracking-widest">
-              {user?.address?.city || user?.city || "Add Location"}
-              {user?.address?.specific_location ? ` • ${user.address.specific_location}` : ""}
+              {(user as any)?.address?.city || (user as any)?.city || "Add Location"}
+              {(user as any)?.address?.specific_location ? ` • ${(user as any).address.specific_location}` : ""}
             </span>
           </div>
           <div className="flex items-center gap-1.5 text-slate-500">
@@ -103,6 +135,7 @@ export function ProviderProfileHeader() {
             <span className="text-[11px] font-bold uppercase tracking-widest lowercase">{user?.email}</span>
           </div>
         </div>
+
       </div>
     </div>
   );

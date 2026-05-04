@@ -2,6 +2,7 @@
 
 import { type ReactNode, useEffect, useState } from "react";
 import { clientApi } from "../lib/api/client";
+import { API_ROUTES } from "../constants/api-routes";
 import { useAuthStore } from "../stores/authStore";
 
 type AuthProviderProps = {
@@ -13,21 +14,32 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user || admin) {
+    if (user) {
       setLoading(false);
       return;
     }
 
+    if (admin) setAdmin(null);
+
     const checkAuth = async () => {
       try {
-        // Try user first
-        const { data } = await clientApi.get("/auth/me");
-        setUser(data.data);
-      } catch {
         try {
-          // Try admin
-          const { data } = await clientApi.get("/admin/me");
-          setAdmin(data.data);
+          await clientApi.post(API_ROUTES.AUTH.REFRESH);
+        } catch {
+          // Ignore refresh errors and attempt profile fetches
+        }
+
+        try {
+          const { data } = await clientApi.get(API_ROUTES.CUSTOMER.PROFILE);
+          setUser(data.data);
+          return;
+        } catch {
+          // Try technician next
+        }
+
+        try {
+          const { data } = await clientApi.get(API_ROUTES.TECHNICIAN.PROFILE);
+          setUser(data.data);
         } catch {
           // Not logged in
         }

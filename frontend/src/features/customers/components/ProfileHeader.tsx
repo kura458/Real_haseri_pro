@@ -3,31 +3,24 @@
 import React from "react";
 import { Heading } from "@/src/features/shared/components";
 import { Camera, MapPin, Phone, Mail, Shield, Loader2 } from "lucide-react";
-import { env } from "@/src/config";
 import { useAuth } from "@/src/hooks/useAuth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar";
 import { useCustomerProfile } from "../hooks/useCustomerProfile";
 import { toast } from "react-hot-toast";
+import { resolveAssetUrl } from "@/src/utils/resolve-asset-url";
 
 export function ProfileHeader() {
   const { user } = useAuth();
   const { uploadAvatar, loading } = useCustomerProfile();
   const fileInputRef = React.useRef<HTMLInputElement>(null);
 
-  const resolveAvatarSrc = (src?: string) => {
-    if (!src) return null;
-    if (src.startsWith("http://") || src.startsWith("https://")) return src;
-    if (!env.BACKEND_ORIGIN) return src.startsWith("/") ? src : `/${src}`;
-    return src.startsWith("/") ? `${env.BACKEND_ORIGIN}${src}` : `${env.BACKEND_ORIGIN}/${src}`;
-  };
-
-  const avatarSrc = resolveAvatarSrc(user?.avatar);
+  const avatarSrc = resolveAssetUrl(user?.avatar);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const res = await uploadAvatar(file);
-      if (res) toast.success("Avatar updated");
+      if (res !== null) toast.success("Avatar updated");
       else toast.error("Failed to update avatar");
     }
   };

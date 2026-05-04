@@ -72,7 +72,6 @@ export const useGoogleRegister = () => {
             auto_select: false,
           });
           window.__googleInit = true;
-          console.log("Google SDK Initialized");
         }
         setGoogleReady(true);
       } catch (err) {

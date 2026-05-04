@@ -9,18 +9,20 @@ import { Button } from "@/src/components/ui/button";
 import { cn } from "@/src/lib/utils";
 import { useCustomerProfile } from "../hooks/useCustomerProfile";
 import { toast } from "react-hot-toast";
+import { resolveAssetUrl } from "@/src/utils/resolve-asset-url";
 
 export function ProfileCover() {
   const { user } = useAuth();
   const { uploadCover, loading } = useCustomerProfile();
   const [isExpanded, setIsExpanded] = useState(false);
   const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const coverSrc = resolveAssetUrl(user?.cover_image);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
       const res = await uploadCover(file);
-      if (res) toast.success("Cover image updated");
+      if (res !== null) toast.success("Cover image updated");
       else toast.error("Failed to update cover image");
     }
   };
@@ -44,9 +46,9 @@ export function ProfileCover() {
       <div className="absolute bottom-0 left-0 w-32 h-32 border-b-[6px] border-l-[6px] border-primary z-10 pointer-events-none" />
       
       <div className="absolute inset-0 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-950 opacity-80" />
-      {user?.cover_image ? (
+      {coverSrc ? (
         <Image 
-          src={user.cover_image} 
+          src={coverSrc} 
           alt="Cover" 
           fill
           priority

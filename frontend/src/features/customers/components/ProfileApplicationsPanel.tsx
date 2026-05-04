@@ -8,18 +8,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import { useJobApplications } from "@/src/features/jobs/hooks";
 import type { Job, JobApplication } from "@/src/features/jobs/types";
 import { formatDate } from "@/src/utils/date-utils";
-import { env } from "@/src/config";
+import { resolveAssetUrl } from "@/src/utils/resolve-asset-url";
 
 interface ProfileApplicationsPanelProps {
   jobs: Job[];
 }
-
-const resolveAvatarSrc = (src?: string | null) => {
-  if (!src) return null;
-  if (src.startsWith("http://") || src.startsWith("https://")) return src;
-  if (!env.BACKEND_ORIGIN) return src.startsWith("/") ? src : `/${src}`;
-  return src.startsWith("/") ? `${env.BACKEND_ORIGIN}${src}` : `${env.BACKEND_ORIGIN}/${src}`;
-};
 
 const getInitials = (name?: string | null) => {
   if (!name) return "T";
@@ -96,7 +89,7 @@ export function ProfileApplicationsPanel({ jobs }: ProfileApplicationsPanelProps
           </div>
           {applications.map((application) => {
             const providerName = application.provider?.name || "Technician";
-            const avatarSrc = resolveAvatarSrc(application.provider?.avatar);
+            const avatarSrc = resolveAssetUrl(application.provider?.avatar);
 
             return (
               <div

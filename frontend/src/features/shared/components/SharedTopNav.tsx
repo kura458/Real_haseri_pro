@@ -18,7 +18,7 @@ import { cn } from "@/src/lib/utils";
 import { Button } from "@/src/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
 
-export const CustomerTopNav = () => {
+export const SharedTopNav = () => {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 

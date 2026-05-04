@@ -12,7 +12,7 @@ export const useProviderVerification = () => {
     setError(null);
     try {
       const res = await providersApi.submitVerification(formData);
-      return res.data.data;
+      return res.data?.data ?? true;
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Submission failed";
       setError(message);

@@ -16,6 +16,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/src/components/ui/avatar"
 import { LogOut, LayoutDashboard, ShieldCheck, UserCircle, ChevronDown } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/src/lib/utils";
+import { resolveAssetUrl } from "@/src/utils/resolve-asset-url";
 
 const MenuAvatar = ({
   src,
@@ -44,32 +45,25 @@ const MenuAvatar = ({
 );
 
 export const UserMenu = () => {
-  const { user, logout, isAdmin, adminLogout } = useAuth();
+  const { user, logout } = useAuth();
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  if (!user && !isAdmin) return null;
+  if (!user) return null;
 
   const handleLogout = () => {
-    if (isAdmin) {
-      adminLogout();
-    } else {
-      logout();
-    }
+    logout();
     router.push("/login");
   };
 
-  const initials = isAdmin
-    ? "AD"
-    : `${user?.first_name?.[0] || ""}${user?.last_name?.[0] || ""}`.toUpperCase() || "U";
-  const displayName = isAdmin ? "Administrator" : `${user?.first_name} ${user?.last_name}`;
-  const identifier = isAdmin ? "Admin Portal" : user?.email || user?.phone || "User Account";
+  const initials = `${user?.first_name?.[0] || ""}${user?.last_name?.[0] || ""}`.toUpperCase() || "U";
+  const displayName = `${user?.first_name} ${user?.last_name}`;
+  const identifier = user?.email || user?.phone || "User Account";
+  const avatarSrc = resolveAssetUrl(user?.avatar);
 
-  const dashboardHref = isAdmin 
-    ? "/admin/dashboard" 
-    : user?.role === "customer" 
-      ? "/customer/profile" 
-      : "/technician/profile";
+  const dashboardHref = user?.role === "customer" 
+    ? "/customer/profile" 
+    : "/technician/profile";
 
   return (
     <div 
@@ -89,7 +83,7 @@ export const UserMenu = () => {
             )}
           >
             <MenuAvatar
-              src={user?.avatar}
+              src={avatarSrc}
               alt={displayName}
               initials={initials}
               className="h-10 w-10 group-hover:border-slate-900 transition-colors duration-300"
@@ -121,7 +115,7 @@ export const UserMenu = () => {
           <div className="p-6 bg-white border-b border-slate-100">
             <div className="flex items-center gap-4 mb-4">
               <MenuAvatar
-                src={user?.avatar}
+                src={avatarSrc}
                 alt={displayName}
                 initials={initials}
                 className="h-12 w-12 border border-slate-900/20"
@@ -148,41 +142,39 @@ export const UserMenu = () => {
 
           {/* Menu Items - Spacious & Modern */}
           <div className="p-2 space-y-1 bg-slate-50/30">
-            {!isAdmin && (
-              <>
-                <DropdownMenuItem asChild>
-                  <Link 
-                    href="/customer/profile"
-                    onClick={() => setOpen(false)}
-                    className="flex items-center gap-4 p-4 rounded-none focus:bg-white focus:text-primary border border-transparent focus:border-slate-900/10 cursor-pointer transition-all group"
-                  >
-                    <div className="w-8 h-8 flex items-center justify-center bg-white border border-slate-200 group-focus:border-primary/20 transition-colors">
-                      <UserCircle className="w-4 h-4 text-slate-400 group-focus:text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-[11px] font-black uppercase tracking-widest">My Profile</p>
-                      <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-tight">Personal settings</p>
-                    </div>
-                  </Link>
-                </DropdownMenuItem>
+            <>
+              <DropdownMenuItem asChild>
+                <Link 
+                  href="/customer/profile"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-4 p-4 rounded-none focus:bg-white focus:text-primary border border-transparent focus:border-slate-900/10 cursor-pointer transition-all group"
+                >
+                  <div className="w-8 h-8 flex items-center justify-center bg-white border border-slate-200 group-focus:border-primary/20 transition-colors">
+                    <UserCircle className="w-4 h-4 text-slate-400 group-focus:text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-black uppercase tracking-widest">My Profile</p>
+                    <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-tight">Personal settings</p>
+                  </div>
+                </Link>
+              </DropdownMenuItem>
 
-                <DropdownMenuItem asChild>
-                  <Link 
-                    href="/customer/verify"
-                    onClick={() => setOpen(false)}
-                    className="flex items-center gap-4 p-4 rounded-none focus:bg-white focus:text-primary border border-transparent focus:border-slate-900/10 cursor-pointer transition-all group"
-                  >
-                    <div className="w-8 h-8 flex items-center justify-center bg-white border border-slate-200 group-focus:border-primary/20 transition-colors">
-                      <ShieldCheck className="w-4 h-4 text-slate-400 group-focus:text-primary" />
-                    </div>
-                    <div>
-                      <p className="text-[11px] font-black uppercase tracking-widest">Security</p>
-                      <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-tight">Account verification</p>
-                    </div>
-                  </Link>
-                </DropdownMenuItem>
-              </>
-            )}
+              <DropdownMenuItem asChild>
+                <Link 
+                  href="/customer/verify"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-4 p-4 rounded-none focus:bg-white focus:text-primary border border-transparent focus:border-slate-900/10 cursor-pointer transition-all group"
+                >
+                  <div className="w-8 h-8 flex items-center justify-center bg-white border border-slate-200 group-focus:border-primary/20 transition-colors">
+                    <ShieldCheck className="w-4 h-4 text-slate-400 group-focus:text-primary" />
+                  </div>
+                  <div>
+                    <p className="text-[11px] font-black uppercase tracking-widest">Security</p>
+                    <p className="text-[9px] text-muted-foreground uppercase font-bold tracking-tight">Account verification</p>
+                  </div>
+                </Link>
+              </DropdownMenuItem>
+            </>
 
             <DropdownMenuSeparator className="mx-2 my-2 bg-slate-200" />
 

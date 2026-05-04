@@ -9,6 +9,8 @@ export const useCustomerProfile = () => {
   const [error, setError] = useState<string | null>(null);
   const { setUser } = useAuth();
 
+  const resolveUser = (payload: any) => payload?.data ?? payload?.user ?? payload?.data?.user ?? null;
+
   const fetchProfile = async () => {
     setLoading(true);
     try {
@@ -47,8 +49,9 @@ export const useCustomerProfile = () => {
       const formData = new FormData();
       formData.append("avatar", file);
       const res = await customersApi.updateAvatar(formData);
-      setUser(res.data.data);
-      return res.data.data;
+      const userData = resolveUser(res.data);
+      if (userData) setUser(userData);
+      return userData ?? true;
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Avatar upload failed";
       setError(message);
@@ -65,8 +68,9 @@ export const useCustomerProfile = () => {
       const formData = new FormData();
       formData.append("cover_image", file);
       const res = await customersApi.updateCover(formData);
-      setUser(res.data.data);
-      return res.data.data;
+      const userData = resolveUser(res.data);
+      if (userData) setUser(userData);
+      return userData ?? true;
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Cover upload failed";
       setError(message);

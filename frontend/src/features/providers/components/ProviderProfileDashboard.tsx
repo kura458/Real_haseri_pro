@@ -9,8 +9,10 @@ import { toast } from "react-hot-toast";
 import { ProviderProfileCover } from "./ProviderProfileCover";
 import { ProviderProfileHeader } from "./ProviderProfileHeader";
 import { ProviderProfileSidebar } from "./ProviderProfileSidebar";
-import { ProviderSkillsCard } from "./ProviderSkillsCard";
+import { ProviderRecentJobs } from "./ProviderRecentJobs";
+import { ProviderAnalytics } from "./ProviderAnalytics";
 import { ProfileEditableAside } from "@/src/features/customers/components/ProfileEditableAside";
+import { SharedChatWidget } from "@/src/features/shared/components";
 
 export function ProviderProfileDashboard() {
   const { user } = useAuth();
@@ -39,9 +41,11 @@ export function ProviderProfileDashboard() {
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_340px] gap-8 lg:gap-10">
           <div className="space-y-8">
-            <ProviderSkillsCard skills={(user as any)?.skills} />
+            <ProviderAnalytics completedJobs={12} activeContracts={3} />
+            <ProviderRecentJobs />
           </div>
           <div className="space-y-6">
+            <SharedChatWidget />
             <ProfileEditableAside
               title="Personal"
               icon={<Shield className="w-5 h-5" />}
@@ -70,7 +74,10 @@ export function ProviderProfileDashboard() {
               data={[
                 { label: "City", name: "city", value: (user as any)?.address?.city || (user as any)?.city || "" },
                 { label: "Sub City", name: "sub_city", value: (user as any)?.address?.sub_city || (user as any)?.sub_city || "" },
+                { label: "Woreda", name: "woreda", value: (user as any)?.address?.woreda || (user as any)?.woreda || "" },
+                { label: "Kebele", name: "kebele", value: (user as any)?.address?.kebele || (user as any)?.kebele || "" },
                 { label: "Specific Location", name: "specific_location", value: (user as any)?.address?.specific_location || (user as any)?.specific_location || "" },
+                { label: "Address Label", name: "label", value: (user as any)?.address?.label || "" },
               ]}
               onSave={handleSave}
             />

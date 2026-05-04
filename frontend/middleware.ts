@@ -5,20 +5,20 @@ const authPages = ["/login", "/register/customer", "/register/provider", "/admin
 
 const adminPages = ["/admin/dashboard", "/admin/users", "/admin/reports", "/admin/categories", "/admin/audit-logs"];
 
-const protectedPages = ["/dashboard", "/jobs/post", "/applications", "/contracts", "/chat", "/notifications", "/settings"];
 
 const publicPages = ["/", "/jobs", "/providers"];
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+  const isAdminRoute = pathname.startsWith("/admin");
 
   // Check cookies
   const refreshToken = request.cookies.get("refresh_token")?.value;
-  const adminToken = request.cookies.get("admin_refresh_token")?.value;
+  const adminToken = isAdminRoute ? request.cookies.get("admin_refresh_token")?.value : undefined;
 
   // Redirect logged-in users away from auth pages
   if (authPages.some((path) => pathname.startsWith(path))) {
-    if (adminToken) {
+    if (adminToken && isAdminRoute) {
       return NextResponse.redirect(new URL("/admin/dashboard", request.url));
     }
     if (refreshToken) {
@@ -33,14 +33,6 @@ export function middleware(request: NextRequest) {
       const response = NextResponse.redirect(new URL("/admin/login", request.url));
       response.cookies.delete("admin_refresh_token");
       return response;
-    }
-    return NextResponse.next();
-  }
-
-  // Protect authenticated pages
-  if (protectedPages.some((path) => pathname.startsWith(path))) {
-    if (!refreshToken) {
-      return NextResponse.redirect(new URL("/login", request.url));
     }
     return NextResponse.next();
   }
