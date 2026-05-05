@@ -1,0 +1,25 @@
+{
+  "cliVersion": "4.65.2",
+  "generatorName": "fernapi/fern-php-sdk",
+  "generatorVersion": "2.4.0",
+  "generatorConfig": {
+    "clientName": "Brevo",
+    "namespace": "Brevo",
+    "composerJson": {
+      "description": "Official PHP SDK for the Brevo API.",
+      "author": {
+        "name": "Brevo",
+        "url": "https://brevo.com",
+        "email": "support@brevo.com"
+      },
+      "license": "MIT"
+    },
+    "enable-wire-tests": false,
+    "propertyAccess": "public",
+    "packageName": "getbrevo/brevo-php",
+    "generateClientInterfaces": true,
+    "useDefaultRequestParameterValues": true
+  },
+  "originGitCommit": "d2e18d0bd27160206c8251e11269b139a3b4ea10",
+  "sdkVersion": "4.0.13"
+}
