@@ -1,3 +1,4 @@
+// Task: HAS-31 - Session Management & Access Control
 "use client";
 
 import { useState } from "react";

@@ -1,3 +1,4 @@
+// Task: HAS-30 - User Login API with Validation
 import { clientApi } from "@/src/lib/api/client";
 import type { LoginInput, RegisterInput, ForgotPasswordInput, ResetPasswordInput } from "../types";
 
