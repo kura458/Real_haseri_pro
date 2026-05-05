@@ -14,6 +14,8 @@ export const setAccessToken = (token: string | null) => {
   accessToken = token;
 };
 
+export const getAccessToken = () => accessToken;
+
 const extractAccessToken = (data: unknown) => {
   if (!data || typeof data !== "object") return null;
   const payload = data as Record<string, any>;
@@ -45,6 +47,16 @@ clientApi.interceptors.response.use(
   async (error: unknown) => {
     if (axios.isAxiosError(error)) {
       const config = error.config as any;
+      const skipRefreshPaths = [
+        "/auth/login",
+        "/auth/register",
+        "/auth/google",
+        "/auth/refresh",
+        "/admin/refresh",
+      ];
+      const shouldSkipRefresh =
+        skipRefreshPaths.some((path) => config?.url?.includes(path)) ||
+        config?.headers?.["X-Skip-Auth-Refresh"] === "1";
 
       // Retry mechanism for fragile dev servers dropping connections
       if (error.message === "Network Error" && (!config._retryCount || config._retryCount < 2)) {
@@ -55,7 +67,7 @@ clientApi.interceptors.response.use(
 
       if (
         error.response?.status === 401 &&
-        !config?.url?.includes("/auth/refresh")
+        !shouldSkipRefresh
       ) {
         try {
           const refreshResponse = await clientApi.post("/auth/refresh");

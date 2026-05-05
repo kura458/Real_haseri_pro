@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useId, useState } from "react";
 import { env } from "@/src/config/env";
 import { userAuthApi } from "@/src/features/auth/user/services";
 import { useAuth } from "@/src/hooks/useAuth";
 import { useRouter } from "next/navigation";
+import { clientApi, setAccessToken } from "@/src/lib/api/client";
 
 declare global {
   interface Window {
@@ -13,38 +14,96 @@ declare global {
   }
 }
 
-export const useGoogleRegister = () => {
+type GoogleRegisterOptions = {
+  onNewUser?: (userId?: string) => void;
+  onExistingUser?: (user: any) => void;
+  onError?: (message: string) => void;
+  buttonText?: "signin_with" | "signup_with";
+  buttonTheme?: "outline" | "filled_blue" | "filled_black";
+  buttonSize?: "large" | "medium" | "small";
+  buttonShape?: "rectangular" | "pill";
+};
+
+export const useGoogleRegister = (options: GoogleRegisterOptions = {}) => {
   const { setUser } = useAuth();
   const router = useRouter();
   const [googleLoading, setGoogleLoading] = useState(false);
   const [googleReady, setGoogleReady] = useState(false);
   const [googleError, setGoogleError] = useState<string | null>(null);
+  const buttonId = useId();
+  const resolveUser = (payload: any) => payload?.data?.user ?? payload?.user ?? payload?.data ?? null;
+  const resolveToken = (payload: any) =>
+    payload?.data?.access_token ||
+    payload?.data?.token ||
+    payload?.data?.tokens?.access_token ||
+    payload?.access_token ||
+    payload?.token ||
+    null;
 
   const handleResponse = async (response: { credential?: string }) => {
     if (!response?.credential) {
-      setGoogleLoading(false);
       return;
     }
     try {
       setGoogleLoading(true);
       setGoogleError(null);
       const res = await userAuthApi.google({ id_token: response.credential });
-      const payload = res.data.data;
+      const payload = res.data?.data ?? res.data;
+      const token = resolveToken(res.data);
+      if (token) setAccessToken(token);
+
       if (payload?.new_user) {
+        const newUserId = payload?.user_id ?? payload?.user?.id;
+        if (options.onNewUser) {
+          options.onNewUser(newUserId);
+          return;
+        }
         router.push("/register/role");
         return;
       }
-      if (payload?.user) {
-        setUser(payload.user);
-        router.push(payload.user.role === "admin" ? "/admin/dashboard" : "/dashboard");
+      const user = resolveUser(res.data);
+      if (!user) {
+        const profileRes = await clientApi.get("/auth/me");
+        const refreshed = resolveUser(profileRes.data);
+        if (!refreshed) throw new Error("Authentication failed");
+        if (options.onExistingUser) {
+          options.onExistingUser(refreshed);
+          return;
+        }
+        setUser(refreshed);
+        router.push(refreshed.role === "admin" ? "/admin/dashboard" : "/dashboard");
         return;
       }
+      if (options.onExistingUser) {
+        options.onExistingUser(user);
+        return;
+      }
+      setUser(user);
+      router.push(user.role === "admin" ? "/admin/dashboard" : "/dashboard");
+      return;
     } catch (err: any) {
-      setGoogleError(err?.message || "Authentication failed");
+      const message = err?.message || "Authentication failed";
+      setGoogleError(message);
+      options.onError?.(message);
     } finally {
       setGoogleLoading(false);
     }
   };
+
+  const renderGoogleButton = useCallback(() => {
+    if (!window.google?.accounts?.id) return;
+    const container = document.getElementById(buttonId) as HTMLDivElement | null;
+    if (!container) return;
+    container.innerHTML = "";
+    window.google.accounts.id.renderButton(container, {
+      theme: options.buttonTheme ?? "outline",
+      size: options.buttonSize ?? "large",
+      shape: options.buttonShape ?? "rectangular",
+      text: options.buttonText ?? "signin_with",
+      logo_alignment: "left",
+      width: container.offsetWidth || 360,
+    });
+  }, [buttonId, options.buttonShape, options.buttonSize, options.buttonText, options.buttonTheme]);
 
   useEffect(() => {
     if (!env.GOOGLE_CLIENT_ID || typeof window === "undefined") return;
@@ -68,8 +127,6 @@ export const useGoogleRegister = () => {
           window.google.accounts.id.initialize({
             client_id: env.GOOGLE_CLIENT_ID,
             callback: handleResponse,
-            use_fedcm_for_prompt: false, // Set to false for better compatibility
-            auto_select: false,
           });
           window.__googleInit = true;
         }
@@ -80,43 +137,10 @@ export const useGoogleRegister = () => {
     };
     init();
   }, []);
+  useEffect(() => {
+    if (!googleReady) return;
+    renderGoogleButton();
+  }, [googleReady, renderGoogleButton]);
 
-  const handleGoogleLogin = () => {
-    if (googleLoading) return;
-    
-    if (!googleReady || !window.google?.accounts?.id) {
-      setGoogleError("Google Sign-In is not ready yet. Please refresh.");
-      return;
-    }
-
-    setGoogleError(null);
-    setGoogleLoading(true);
-    
-    try {
-      window.google.accounts.id.prompt((notification: any) => {
-        console.log("Google Prompt Notification:", notification.getMomentType(), notification.isDisplayMoment());
-        
-        if (notification.isNotDisplayed()) {
-          console.warn("Google Prompt not displayed:", notification.getNotDisplayedReason());
-          setGoogleError("Please check your browser settings or try again later.");
-          setGoogleLoading(false);
-        }
-        
-        if (notification.isSkippedMoment()) {
-          console.warn("Google Prompt skipped:", notification.getSkippedReason());
-          setGoogleLoading(false);
-        }
-
-        if (notification.isDismissedMoment()) {
-           setGoogleLoading(false);
-        }
-      });
-    } catch (err) {
-      console.error("Google prompt failed", err);
-      setGoogleLoading(false);
-      setGoogleError("Failed to trigger Google Sign-In");
-    }
-  };
-
-  return { googleLoading, googleReady, googleError, handleGoogleLogin };
+  return { googleLoading, googleReady, googleError, googleButtonId: buttonId };
 };

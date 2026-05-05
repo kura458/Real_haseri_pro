@@ -9,6 +9,7 @@ use Haseri\Backend\Shared\Models\RefreshToken;
 use Haseri\Backend\Shared\Helpers\Response;
 use Haseri\Backend\Shared\Helpers\Cookie;
 use Haseri\Backend\Shared\Exceptions\HttpException;
+use Haseri\Backend\Shared\Exceptions\UnauthorizedException;
 
 class AdminAuthController
 {
@@ -62,6 +63,36 @@ class AdminAuthController
             Cookie::delete('admin_refresh_token');
 
             Response::success(['message' => 'Logged out']);
+        } catch (HttpException $e) {
+            Response::error($e->getMessage(), $e->getStatusCode());
+        }
+    }
+
+    public function refresh()
+    {
+        try {
+            $refreshToken = Cookie::get('admin_refresh_token');
+
+            if (empty($refreshToken)) {
+                throw new UnauthorizedException('No refresh token');
+            }
+
+            $storedToken = RefreshToken::where('token', $refreshToken)
+                ->where('revoked', false)
+                ->first();
+
+            if (!$storedToken) {
+                throw new UnauthorizedException('Invalid token');
+            }
+
+            $storedToken->update(['revoked' => true]);
+
+            $result = $this->adminAuthService->refreshToken($refreshToken);
+
+            Cookie::set('admin_refresh_token', $result['refresh_token'], 604800);
+            unset($result['refresh_token']);
+
+            Response::success($result);
         } catch (HttpException $e) {
             Response::error($e->getMessage(), $e->getStatusCode());
         }

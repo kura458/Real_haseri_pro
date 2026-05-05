@@ -15,7 +15,6 @@ import {
   CtaSection
 } from "./sections";
 
-import { GoogleQuickLogin } from "./GoogleQuickLogin";
 
 export const HomeTemplate = () => {
   return (
@@ -23,9 +22,6 @@ export const HomeTemplate = () => {
       <Navbar />
       <main className="flex-grow">
         <HeroSection />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12">
-           <GoogleQuickLogin />
-        </div>
         <FeaturesSection />
         <CategoriesSection />
         <HowItWorksSection />

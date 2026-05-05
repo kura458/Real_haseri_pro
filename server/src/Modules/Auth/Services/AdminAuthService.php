@@ -72,6 +72,23 @@ class AdminAuthService
         return $this->generateTokens($admin);
     }
 
+    public function refreshToken(string $refreshToken)
+    {
+        $payload = JWT::validateRefreshToken($refreshToken);
+
+        if (!isset($payload->role) || $payload->role !== 'admin') {
+            throw new UnauthorizedException('Admin access required');
+        }
+
+        $admin = Admin::find($payload->sub);
+
+        if (!$admin || !$admin->is_active) {
+            throw new UnauthorizedException('Admin not found or inactive');
+        }
+
+        return $this->generateTokens($admin);
+    }
+
     private function generateTokens($admin)
     {
         $accessToken  = JWT::generateAccessToken($admin->id, 'admin');

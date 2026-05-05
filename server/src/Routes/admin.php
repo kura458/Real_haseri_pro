@@ -28,6 +28,11 @@ try {
         exit;
     }
 
+    if ($uri === '/api/admin/refresh' && $method === 'POST') {
+        (new AdminAuthController())->refresh();
+        exit;
+    }
+
     // Technician Approvals
     if ($uri === '/api/admin/verifications/pending' && $method === 'GET') {
         $admin = AuthMiddleware::handleAdmin();

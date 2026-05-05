@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { adminAuthApi } from "../services";
+import { setAccessToken } from "@/src/lib/api/client";
 import { useAuth } from "@/src/hooks/useAuth";
 import type { AdminOtpInput } from "../types";
 
@@ -23,9 +24,7 @@ export const useAdminVerifyOtp = () => {
         res.data?.data?.tokens?.access_token ||
         null;
 
-      if (typeof window !== "undefined" && token) {
-        window.localStorage.setItem("haseri_access_token", token);
-      }
+      if (token) setAccessToken(token);
 
       setAdmin(res.data.data.admin);
       router.push("/admin/dashboard");

@@ -1,6 +1,8 @@
 "use client";
 
 import { useAuth } from "@/src/hooks/useAuth";
+import { adminAuthApi } from "@/src/features/auth/admin/services/admin-auth.api";
+import { setAccessToken } from "@/src/lib/api/client";
 import { resolveAssetUrl } from "@/src/utils/resolve-asset-url";
 
 export function useAdminAvatar() {
@@ -27,12 +29,23 @@ export function useAdminAvatar() {
     .toUpperCase()
     .slice(0, 2);
 
+  const logout = async () => {
+    try {
+      await adminAuthApi.logout();
+    } catch {
+      // Ignore logout errors and clear local state anyway.
+    } finally {
+      setAccessToken(null);
+      adminLogout();
+    }
+  };
+
   return {
     admin,
     fullName,
     email,
     avatarSrc,
     initials,
-    logout: adminLogout,
+    logout,
   };
 }

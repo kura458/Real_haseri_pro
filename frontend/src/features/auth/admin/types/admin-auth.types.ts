@@ -15,6 +15,12 @@ export interface AdminVerifyOtpResponse {
   admin: Admin;
 }
 
+export interface AdminRefreshResponse {
+  access_token: string;
+  expires_in: number;
+  admin: Admin;
+}
+
 export interface AdminOtpInput {
   admin_id: number;
   code: string;

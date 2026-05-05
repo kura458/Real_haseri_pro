@@ -38,8 +38,8 @@ export function AdminUserMenu({ showFullOnOpen = true, side = "bottom", align = 
 
   if (!admin) return null;
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
     router.push("/admin/login");
   };
 
