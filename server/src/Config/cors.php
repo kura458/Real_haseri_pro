@@ -5,3 +5,4 @@ return [
     'allowed_headers' => ['Content-Type', 'Authorization'],
     'supports_credentials' => true,
 ];
+#cours config  to connect with frontend
