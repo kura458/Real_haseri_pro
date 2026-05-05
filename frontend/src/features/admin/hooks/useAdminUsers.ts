@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { adminApi } from "../services";
 import type { AdminUser } from "../types";
 
@@ -8,7 +8,7 @@ export const useAdminUsers = () => {
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchAll = async (params?: Record<string, string>) => {
+  const fetchAll = useCallback(async (params?: Record<string, string>) => {
     setLoading(true);
     try {
       const res = await adminApi.getUsers(params);
@@ -18,22 +18,22 @@ export const useAdminUsers = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  const deactivate = async (id: string) => {
+  const deactivate = useCallback(async (id: string) => {
     await adminApi.deactivateUser(id);
     fetchAll();
-  };
+  }, [fetchAll]);
 
-  const activate = async (id: string) => {
+  const activate = useCallback(async (id: string) => {
     await adminApi.activateUser(id);
     fetchAll();
-  };
+  }, [fetchAll]);
 
-  const remove = async (id: string) => {
+  const remove = useCallback(async (id: string) => {
     await adminApi.deleteUser(id);
     fetchAll();
-  };
+  }, [fetchAll]);
 
   return { users, loading, fetchAll, deactivate, activate, remove };
 };
