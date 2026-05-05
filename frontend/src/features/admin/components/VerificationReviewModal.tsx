@@ -9,8 +9,8 @@ import {
   DialogDescription,
 } from "@/src/components/ui/dialog";
 import { Button } from "@/src/components/ui/button";
-import { 
-  FileText, User, MapPin, CheckCircle2, XCircle, AlertCircle, 
+import {
+  FileText, User, MapPin, CheckCircle2, XCircle, AlertCircle,
   ShieldAlert, ExternalLink, Hash, Landmark, Building
 } from "lucide-react";
 import { cn } from "@/src/lib/utils";
@@ -108,14 +108,14 @@ export function VerificationReviewModal({ verification, isOpen, onClose, onAppro
                   <FileText size={11} /> Documents
                 </h4>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <DocCard 
-                    label="National ID" 
-                    path={verification.national_id_path} 
+                  <DocCard
+                    label="National ID"
+                    path={verification.national_id_path}
                     isImg={isImage(verification.national_id_path)}
                   />
-                  <DocCard 
-                    label={`Proof (${verification.proof_document_type || 'N/A'})`} 
-                    path={verification.proof_document_path} 
+                  <DocCard
+                    label={`Proof (${verification.proof_document_type || 'N/A'})`}
+                    path={verification.proof_document_path}
                     isImg={isImage(verification.proof_document_path)}
                   />
                 </div>
@@ -231,7 +231,7 @@ function DocCard({ label, path, isImg }: { label: string, path?: string | null, 
           </a>
         )}
       </div>
-      
+
       <div className="aspect-video relative rounded-lg overflow-hidden bg-slate-200 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 flex items-center justify-center">
         {path ? (
           isImg ? (

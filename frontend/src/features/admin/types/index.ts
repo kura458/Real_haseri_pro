@@ -55,4 +55,6 @@ export type AdminAnalytics = {
   revenue_today: number;
   total_revenue: number;
   pending_verifications: number;
+  revenue_history?: { name: string; total: number; trend: number }[];
+  user_activity?: { name: string; active: number; new: number }[];
 };

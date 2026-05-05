@@ -6,3 +6,6 @@ export * from './AdminUserMenu';
 export * from './AdminUsersTable';
 export * from './AdminVerificationsTable';
 export * from './VerificationReviewModal';
+export * from './AdminSettings';
+export * from './AdminJobsTable';
+export * from './AdminCategoriesTable';

@@ -8,27 +8,6 @@ import { Users, CreditCard, Activity, DollarSign, ArrowUpRight, Briefcase, Check
 import { cn } from "@/src/lib/utils";
 import { motion } from "framer-motion";
 
-// Dummy data for visualization
-const revenueData = [
-  { name: "Jan", total: 4000, trend: 2400 },
-  { name: "Feb", total: 3000, trend: 1398 },
-  { name: "Mar", total: 5000, trend: 9800 },
-  { name: "Apr", total: 4500, trend: 3908 },
-  { name: "May", total: 6000, trend: 4800 },
-  { name: "Jun", total: 5500, trend: 3800 },
-  { name: "Jul", total: 7000, trend: 4300 },
-];
-
-const userActivityData = [
-  { name: "Mon", active: 120, new: 20 },
-  { name: "Tue", active: 132, new: 18 },
-  { name: "Wed", active: 101, new: 30 },
-  { name: "Thu", active: 143, new: 25 },
-  { name: "Fri", active: 190, new: 40 },
-  { name: "Sat", active: 130, new: 15 },
-  { name: "Sun", active: 110, new: 10 },
-];
-
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
@@ -45,26 +24,82 @@ const itemVariants = {
     y: 0,
     opacity: 1,
     transition: {
-      type: "spring",
+      type: "spring" as const,
       stiffness: 100,
       damping: 15
     }
   }
 };
 
+import { useAdminDashboard } from "../hooks/useAdminDashboard";
+
 export function AdminAnalytics() {
+  const { stats, analytics, loading } = useAdminDashboard();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  if (!isMounted) return <div className="h-96 flex items-center justify-center">
+  if (!isMounted || loading) return <div className="h-96 flex items-center justify-center">
     <div className="flex flex-col items-center gap-4">
       <div className="w-12 h-12 border-4 border-slate-200 border-t-primary rounded-full animate-spin" />
       <span className="text-[10px] font-black uppercase tracking-[0.3em] text-slate-400">Loading System Data...</span>
     </div>
   </div>;
+
+  // Use real data or fallback to 0
+  const kpis = [
+    {
+      title: "Total Revenue",
+      value: analytics?.total_revenue ? `$${analytics.total_revenue.toLocaleString()}` : "$0.00",
+      change: analytics?.revenue_today ? `+$${analytics.revenue_today}` : "No change",
+      icon: <DollarSign size={18} />,
+      positive: true
+    },
+    {
+      title: "Total Users",
+      value: analytics?.total_users?.toLocaleString() || "0",
+      change: analytics?.new_users_today ? `+${analytics.new_users_today}` : "0 today",
+      icon: <Users size={18} />,
+      positive: true
+    },
+    {
+      title: "Technicians",
+      value: stats?.technicians?.toLocaleString() || "0",
+      change: "Active",
+      icon: <Briefcase size={18} />,
+      positive: true
+    },
+    {
+      title: "Pending Review",
+      value: analytics?.pending_verifications?.toLocaleString() || "0",
+      change: analytics?.pending_verifications ? "Action Required" : "Clean",
+      icon: <CheckSquare size={18} />,
+      positive: (analytics?.pending_verifications || 0) === 0
+    }
+  ];
+
+  // Chart data fallbacks (will be replaced by real data if available)
+  const chartRevenueData = analytics?.revenue_history || [
+    { name: "Jan", total: 0, trend: 0 },
+    { name: "Feb", total: 0, trend: 0 },
+    { name: "Mar", total: 0, trend: 0 },
+    { name: "Apr", total: 0, trend: 0 },
+    { name: "May", total: 0, trend: 0 },
+    { name: "Jun", total: 0, trend: 0 },
+    { name: "Jul", total: 0, trend: 0 },
+  ];
+
+  const chartUserActivityData = analytics?.user_activity || [
+    { name: "Mon", active: 0, new: 0 },
+    { name: "Tue", active: 0, new: 0 },
+    { name: "Wed", active: 0, new: 0 },
+    { name: "Thu", active: 0, new: 0 },
+    { name: "Fri", active: 0, new: 0 },
+    { name: "Sat", active: 0, new: 0 },
+    { name: "Sun", active: 0, new: 0 },
+  ];
 
   return (
     <motion.div 
@@ -84,38 +119,17 @@ export function AdminAnalytics() {
 
       {/* KPI Cards */}
       <div className="grid gap-4 md:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
-        <KpiCard 
-          title="Total Revenue" 
-          value="$45,231.89" 
-          change="+20.1%" 
-          icon={<DollarSign size={18} />} 
-          positive={true}
-          index={0}
-        />
-        <KpiCard 
-          title="Total Users" 
-          value="2,350" 
-          change="+18.1%" 
-          icon={<Users size={18} />} 
-          positive={true}
-          index={1}
-        />
-        <KpiCard 
-          title="Technicians" 
-          value="1,234" 
-          change="+4.2%" 
-          icon={<Briefcase size={18} />} 
-          positive={true}
-          index={2}
-        />
-        <KpiCard 
-          title="Pending Review" 
-          value="15" 
-          change="Action Required" 
-          icon={<CheckSquare size={18} />} 
-          positive={false}
-          index={3}
-        />
+        {kpis.map((kpi, idx) => (
+          <KpiCard 
+            key={idx}
+            title={kpi.title} 
+            value={kpi.value} 
+            change={kpi.change} 
+            icon={kpi.icon} 
+            positive={kpi.positive}
+            index={idx}
+          />
+        ))}
       </div>
 
       <div className="grid gap-6 grid-cols-1 lg:grid-cols-7">
@@ -136,7 +150,7 @@ export function AdminAnalytics() {
           </div>
           <div className="h-[250px] md:h-[320px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={revenueData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+              <AreaChart data={chartRevenueData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#0F172A" stopOpacity={0.1}/>
@@ -196,7 +210,7 @@ export function AdminAnalytics() {
           </div>
           <div className="h-[250px] md:h-[320px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={userActivityData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
+              <BarChart data={chartUserActivityData} margin={{ top: 10, right: 10, left: -25, bottom: 0 }}>
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#F1F5F9" />
                 <XAxis 
                   dataKey="name" 
