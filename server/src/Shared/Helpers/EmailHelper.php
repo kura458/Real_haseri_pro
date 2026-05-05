@@ -1,6 +1,10 @@
 <?php
 namespace Haseri\Backend\Shared\Helpers;
 
+
+
+//verification  with email
+#email  verification helper
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -9,7 +13,6 @@ class EmailHelper
     public static function send($to, $subject, $body)
     {
         $mail = new PHPMailer(true);
-
         try {
             $mail->isSMTP();
             $mail->Host       = $_ENV['MAIL_HOST'];
@@ -18,7 +21,6 @@ class EmailHelper
             $mail->Password   = $_ENV['MAIL_PASSWORD'];
             $mail->SMTPSecure = $_ENV['MAIL_ENCRYPTION'];
             $mail->Port       = $_ENV['MAIL_PORT'];
-
             $mail->setFrom($_ENV['MAIL_FROM_ADDRESS'], $_ENV['MAIL_FROM_NAME']);
             $mail->addAddress($to);
             $mail->isHTML(true);
@@ -26,10 +28,7 @@ class EmailHelper
             $mail->Body    = $body;
 
             $mail->send();
-            return true;
-        } catch (Exception $e) {
+            return true;} catch (Exception $e) {
             error_log("Email failed: " . $mail->ErrorInfo);
             return false;
-        }
-    }
-}
+     }}}
