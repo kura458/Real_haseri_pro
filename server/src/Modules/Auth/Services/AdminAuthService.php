@@ -21,22 +21,22 @@ class AdminAuthService
             throw new UnauthorizedException('Account deactivated');
         }
 
-        // Generate 6-digit OTP
+        // Generate 6-digit OTP with leading zeros if necessary     
         $code = str_pad(random_int(0, 999999), 6, '0', STR_PAD_LEFT);
 
-        // Mark old OTPs as used
+        // Mark old OTPs as used to prevent reuse
         AdminOtp::where('admin_id', $admin->id)
             ->where('used', false)
             ->update(['used' => true]);
 
-        // Save new OTP
+        // Save new OTP to database with 5-minute expiration            
         AdminOtp::create([
             'admin_id'   => $admin->id,
             'code'       => $code,
             'expires_at' => date('Y-m-d H:i:s', time() + 300),
         ]);
 
-        // Send OTP via email
+        // Send OTP via email (you can replace this with SMS or other methods if needed)
         EmailHelper::send(
             $admin->email,
             'Admin Login OTP - Haseri',
@@ -61,14 +61,14 @@ class AdminAuthService
             throw new UnauthorizedException('Invalid or expired OTP');
         }
 
-        // Mark OTP as used
+        // Mark OTP as used to prevent reuse
         $otp->update(['used' => true]);
 
-        // Update last login
+        // Update last login timestamp
         $admin = Admin::find($adminId);
         $admin->update(['last_login_at' => date('Y-m-d H:i:s')]);
 
-        // Generate tokens
+        // Generate tokens and return response
         return $this->generateTokens($admin);
     }
 
