@@ -1,3 +1,4 @@
+// Task: HAS-33 Implementing User regesteration user interface  and the user form as well
 "use client";
 
 import React, { useMemo, useState } from "react";
@@ -213,13 +214,13 @@ export const RegisterForm = ({
               <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-primary transition-colors flex items-center gap-2">
                 <div className="flex items-center gap-1.5 border-r border-border pr-2">
                   <svg xmlns="http://www.w3.org/2000/svg" width="22" height="14" viewBox="0 0 640 480" className="rounded-sm shadow-sm">
-                    <path fill="#006233" d="M0 0h640v160H0z"/>
-                    <path fill="#fce300" d="M0 160h640v160H0z"/>
-                    <path fill="#ef3340" d="M0 320h640v160H0z"/>
+                    <path fill="#006233" d="M0 0h640v160H0z" />
+                    <path fill="#fce300" d="M0 160h640v160H0z" />
+                    <path fill="#ef3340" d="M0 320h640v160H0z" />
                     <g transform="translate(320 240) scale(1.06667)">
-                      <circle r="120" fill="#0039a6"/>
-                      <path fill="none" stroke="#fce300" strokeWidth="12" d="M0-100l23.5 72.4h76.1L38.2 16.8l23.5 72.4L0 44.8l-61.7 44.4 23.5-72.4-61.4-44.4h76.1z"/>
-                      <circle r="25" fill="#fce300"/>
+                      <circle r="120" fill="#0039a6" />
+                      <path fill="none" stroke="#fce300" strokeWidth="12" d="M0-100l23.5 72.4h76.1L38.2 16.8l23.5 72.4L0 44.8l-61.7 44.4 23.5-72.4-61.4-44.4h76.1z" />
+                      <circle r="25" fill="#fce300" />
                     </g>
                   </svg>
                   <span className="text-[11px] font-black text-foreground tracking-tighter">+251</span>
