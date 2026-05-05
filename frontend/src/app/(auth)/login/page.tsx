@@ -1,3 +1,4 @@
+// Task: HAS-32 Implementing Login user interface
 import { LoginForm } from "@/src/features/auth/user/components/LoginForm";
 import { Metadata } from "next";
 
