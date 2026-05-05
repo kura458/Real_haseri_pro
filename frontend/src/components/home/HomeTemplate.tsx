@@ -1,3 +1,4 @@
+// This component serves as the main template for the homepage, assembling various sections such as the hero, features, categories, and more. It also includes the navbar and footer to create a cohesive layout for the entire page.
 import React from "react";
 import { Navbar } from "@/src/components/layout/Navbar";
 import { Footer } from "@/src/components/layout/Footer";

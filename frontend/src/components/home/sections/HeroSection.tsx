@@ -1,5 +1,5 @@
 "use client";
-
+// This component renders the hero section of the homepage, featuring a compelling headline, a brief description, and prominent call-to-action buttons. It also includes an eye-catching image on the right side and decorative background elements to create an engaging first impression for visitors.
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";

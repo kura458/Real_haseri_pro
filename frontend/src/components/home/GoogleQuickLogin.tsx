@@ -1,5 +1,5 @@
 "use client";
-
+// This component renders a Google Quick Login prompt that appears on the homepage when the Google Identity Services library is ready. It uses the useGoogleRegister hook to handle the login process and displays a styled prompt with a call-to-action button for users to continue with their Google account.
 import React, { useEffect, useState } from "react";
 import { Button } from "@/src/components/ui/button";
 import { Cookie, Loader2 } from "lucide-react";

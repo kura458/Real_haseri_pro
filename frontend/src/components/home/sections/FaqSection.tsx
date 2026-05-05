@@ -1,5 +1,6 @@
 "use client";
 
+// This component renders the FAQ section on the homepage, providing answers to common questions about hiring local technicians in Ethiopia. It uses an accordion layout for easy navigation and readability.
 import React from "react";
 import { motion } from "framer-motion";
 import {

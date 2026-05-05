@@ -1,5 +1,5 @@
 "use client";
-
+// This component renders the logo for the Haseri platform, which consists of a stylized "H" inside a colored box and the brand name "Haseri." The logo is responsive and can be customized in size through props. It also includes a hover animation that rotates the box when hovered over, creating an engaging visual effect for users.
 import React from "react";
 import Link from "next/link";
 

@@ -6,6 +6,7 @@ import { Search, Hammer, Brush, Laptop, Camera, Car, Heart, Utensils, Music, Gra
 import { Input } from "@/src/components/ui/input";
 import { Button } from "@/src/components/ui/button";
 
+// Define the categories with their respective icons and job counts
 const categories = [
   { name: "Home Repair", icon: Hammer, count: 120 },
   { name: "Design", icon: Brush, count: 85 },

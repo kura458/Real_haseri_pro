@@ -1,3 +1,4 @@
+//  This component renders the features section on the homepage, highlighting the key benefits of using the Haseri platform for hiring local technicians in Ethiopia. It includes animated headings, descriptive text, and visually appealing images to showcase the platform's reliability and seamless booking experience.
 "use client";
 
 import React from "react";

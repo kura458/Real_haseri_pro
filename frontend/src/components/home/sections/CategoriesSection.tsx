@@ -1,3 +1,4 @@
+// This component renders the categories section on the homepage, allowing users to explore different service categories and find experts for their needs. It includes a search bar and a grid of category cards with icons and job counts.
 "use client";
 
 import React, { useState } from "react";

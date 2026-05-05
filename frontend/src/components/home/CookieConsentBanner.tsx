@@ -1,5 +1,5 @@
 "use client";
-
+// This component renders a cookie consent banner that appears at the bottom of the screen when a user first visits the site. It uses localStorage to remember the user's choice and includes smooth animations for showing and hiding the banner.
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/src/components/ui/button";

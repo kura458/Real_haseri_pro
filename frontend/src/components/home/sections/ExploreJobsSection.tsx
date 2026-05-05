@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Clock, MapPin, DollarSign, ChevronRight } from "lucide-react";
 import { Button } from "@/src/components/ui/button";
 
+// Sample job data to display in the Explore Jobs section
 const jobs = [
   {
     id: 1,

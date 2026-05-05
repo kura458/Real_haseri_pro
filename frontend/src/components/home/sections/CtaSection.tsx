@@ -6,6 +6,7 @@ import { Button } from "@/src/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 
+// This component renders a call-to-action section on the homepage, encouraging users to post a job or join as a technician. It features an impressive background image of Addis Ababa city with overlay effects, and two prominent buttons for user engagement.
 export const CtaSection = () => {
   return (
     <section className="py-24 bg-white dark:bg-slate-950 px-4 md:px-6">
