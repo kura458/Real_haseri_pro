@@ -34,6 +34,10 @@ export type PendingVerification = {
   };
   address: {
     city: string;
+    sub_city?: string;
+    woreda?: string;
+    kebele?: string;
+    specific_location?: string;
   } | null;
   created_at: string;
 };

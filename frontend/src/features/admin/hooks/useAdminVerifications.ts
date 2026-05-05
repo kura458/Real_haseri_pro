@@ -1,33 +1,44 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { adminApi } from "../services";
 import type { PendingVerification } from "../types";
+import { toast } from "sonner";
 
 export const useAdminVerifications = () => {
   const [verifications, setVerifications] = useState<PendingVerification[]>([]);
   const [loading, setLoading] = useState(false);
 
-  const fetchPending = async () => {
+  const fetchPending = useCallback(async () => {
     setLoading(true);
     try {
       const res = await adminApi.getPendingVerifications();
       setVerifications(res.data.data);
-    } catch {
-      //
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to fetch verifications");
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   const approve = async (id: number) => {
-    await adminApi.approveVerification(id);
-    fetchPending();
+    try {
+      await adminApi.approveVerification(id);
+      toast.success("Technician approved successfully");
+      fetchPending();
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to approve technician");
+    }
   };
 
   const reject = async (id: number, reason: string) => {
-    await adminApi.rejectVerification(id, reason);
-    fetchPending();
+    try {
+      await adminApi.rejectVerification(id, reason);
+      toast.success("Technician rejected");
+      fetchPending();
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "Failed to reject technician");
+    }
   };
 
   return { verifications, loading, fetchPending, approve, reject };
