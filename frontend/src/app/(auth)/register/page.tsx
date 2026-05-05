@@ -1,3 +1,4 @@
+// Task: HAS-33 - Implementing User registration user interface
 "use client";
 
 import React from "react";
