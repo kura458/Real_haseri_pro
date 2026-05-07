@@ -15,14 +15,10 @@ class TechnicianVerificationService
     private $fileUploader;
 
     public function __construct()
-    {
-        $this->imageUploader = new ImageUploader();
-        $this->fileUploader = new FileUploader();
-    }
-
+    {$this->imageUploader = new ImageUploader();
+    $this->fileUploader = new FileUploader();}
     public function submit($userId, array $data, array $files)
-    {
-        if (empty($files['national_id'])) {
+    { if (empty($files['national_id'])) {
             throw new ValidationException(['national_id' => 'National ID is required']);
         }
 
@@ -31,8 +27,7 @@ class TechnicianVerificationService
         $proofPath = null;
         $proofType = null;
 
-        if (!empty($files['proof_document'])) {
-            $proofPath = $this->fileUploader->upload($files['proof_document'], 'documents');
+        if (!empty($files['proof_document'])) { $proofPath = $this->fileUploader->upload($files['proof_document'], 'documents');
             $proofType = $data['proof_document_type'] ?? null;
         }
 
