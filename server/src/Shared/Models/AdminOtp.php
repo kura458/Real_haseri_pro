@@ -1,6 +1,8 @@
 <?php
 namespace Haseri\Backend\Shared\Models;
 use Illuminate\Database\Eloquent\Model;
+
+#admin otp
 class AdminOtp extends Model
 {
     protected $table = 'admin_otps';
