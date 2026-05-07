@@ -1,6 +1,7 @@
 <?php
 use Illuminate\Database\Capsule\Manager as DB;
 
+#address for the  shared is added
 DB::schema()->create('addresses', function ($table) {
     $table->id();
     $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
@@ -14,5 +15,5 @@ DB::schema()->create('addresses', function ($table) {
     $table->timestamps();
     $table->index('user_id');
     $table->index('city');
+
 });
-echo "addresses table created\n";

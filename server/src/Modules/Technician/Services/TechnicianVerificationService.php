@@ -8,6 +8,7 @@ use Haseri\Backend\Shared\Helpers\Upload\FileUploader;
 use Haseri\Backend\Shared\Exceptions\ValidationException;
 use Haseri\Backend\Shared\Exceptions\NotFoundException;
 
+#technicain  inclduing thiers proffecational  profile
 class TechnicianVerificationService
 {
     private $imageUploader;
