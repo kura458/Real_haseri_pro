@@ -8,12 +8,12 @@ export const useMediaQuery = (query: string): boolean => {
     return window.matchMedia(query).matches;
   });
 
+
+
   useEffect(() => {
     const media = window.matchMedia(query);
-
-    const handler = (e: MediaQueryListEvent) => setMatches(e.matches);
-
-    media.addEventListener("change", handler);
+const handler = (e: MediaQueryListEvent) => setMatches(e.matches);
+ media.addEventListener("change", handler);
     return () => media.removeEventListener("change", handler);
   }, [query]);
 
