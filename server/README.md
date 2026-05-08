@@ -254,3 +254,4 @@ server/
 - All API routes are defined under [src/Routes](src/Routes).
 - Module controllers handle HTTP boundaries, services contain business logic.
 - Keep uploads under `storage/uploads` with appropriate permissions.
+update the server
