@@ -1,5 +1,6 @@
 "use client";
 
+//  HAS-41 Explore  the job selection  and Allow technicians to update location and availability information
 import React from "react";
 import { motion } from "framer-motion";
 import { Clock, MapPin, DollarSign, ChevronRight } from "lucide-react";
