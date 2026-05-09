@@ -30,6 +30,7 @@ class TechnicianVerificationService
         $proofPath = null;
         $proofType = null;
 
+        #verificatio docue  is added
         if (!empty($files['proof_document'])) {
             $proofPath = $this->fileUploader->upload($files['proof_document'], 'documents');
             $proofType = $data['proof_document_type'] ?? null;

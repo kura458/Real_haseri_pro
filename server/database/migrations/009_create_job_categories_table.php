@@ -8,4 +8,3 @@ DB::schema()->create('job_categories', function ($table) {
     $table->boolean('is_active')->default(true);
     $table->timestamp('created_at')->useCurrent();
 });
-echo " job_categories table created\n";

@@ -6,7 +6,7 @@ use Haseri\Backend\Shared\Models\Job;
 use Haseri\Backend\Shared\Models\Address;
 use Haseri\Backend\Modules\Payments\Services\PaymentService;
 use Haseri\Backend\Shared\Exceptions\NotFoundException;
-
+#jop posting service
 class JobService
 {
     private $repository;
