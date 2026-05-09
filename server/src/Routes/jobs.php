@@ -45,6 +45,7 @@ try {
         exit;
     }
 
+    // authenticated routes prevent unauthenticated access to job creation and managements
     if ($uri === '/api/jobs' && $method === 'POST') {
         $user = AuthMiddleware::handle();
         (new JobController())->store($user);
