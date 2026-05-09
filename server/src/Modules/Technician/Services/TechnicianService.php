@@ -11,8 +11,8 @@ class TechnicianService
 {
     public function get($userId)
     {
-        $user = User::with(['address', 'technicianVerification', 'skills'])->find($userId);
-        if (!$user) throw new NotFoundException('User not found');
+     $user = User::with(['address', 'technicianVerification', 'skills'])->find($userId);
+ if (!$user) throw new NotFoundException('User not found');
         return $user;
     }
 
