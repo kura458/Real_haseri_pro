@@ -1,6 +1,7 @@
 "use client";
 
-//  HAS-41 Explore  the job selection  and Allow technicians to update location and availability information
+//  HAS-41 Explore the job selection and allow technicians to update location and availability information
+// TODO: Replace static sample data with live fetch from /api/jobs for available technician job requests.
 import React from "react";
 import { motion } from "framer-motion";
 import { Clock, MapPin, DollarSign, ChevronRight } from "lucide-react";

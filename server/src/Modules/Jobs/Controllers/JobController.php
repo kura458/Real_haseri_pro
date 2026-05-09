@@ -2,6 +2,7 @@
 namespace Haseri\Backend\Modules\Jobs\Controllers;
 
 use Haseri\Backend\Modules\Jobs\Services\JobService;
+use Haseri\Backend\Modules\Jobs\Resources\JobCollection;
 use Haseri\Backend\Modules\Jobs\Requests\CreateJobRequest;
 use Haseri\Backend\Shared\Helpers\Response;
 use Haseri\Backend\Shared\Exceptions\HttpException;
@@ -17,9 +18,10 @@ class JobController
 
     public function index()
     {
+        // Available jobs API for technicians: returns open job requests with title, description, location, and budget
         $filters = $_GET;
         $result = $this->service->getAll($filters);
-        Response::success($result);
+        Response::success(JobCollection::format($result));
     }
 
     public function show($id)
