@@ -10,6 +10,7 @@ class JobResource
             'title' => $job->title,
             'description' => $job->description,
             'price' => $job->price,
+            'budget' => $job->price,
             'commission' => $job->commission,
             'status' => $job->status,
             'category' => $job->category ? $job->category->name : null,
@@ -26,6 +27,11 @@ class JobResource
                 'sub_city' => $job->address->sub_city,
                 'specific_location' => $job->address->specific_location,
             ] : null,
+            'location' => $job->address ? trim(implode(', ', array_filter([
+                $job->address->specific_location,
+                $job->address->sub_city,
+                $job->address->city,
+            ]))) : null,
             'created_at' => $job->created_at,
         ];
     }
