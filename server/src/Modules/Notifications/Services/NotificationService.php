@@ -4,7 +4,7 @@ namespace Haseri\Backend\Modules\Notifications\Services;
 use Haseri\Backend\Shared\Models\User;
 use Haseri\Backend\Shared\Models\Notification;
 use Haseri\Backend\Shared\Exceptions\NotFoundException;
-
+#notifications service
 class NotificationService
 {
     public function getAll($userId)

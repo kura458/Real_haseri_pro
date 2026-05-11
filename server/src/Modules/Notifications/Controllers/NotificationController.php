@@ -4,7 +4,7 @@ namespace Haseri\Backend\Modules\Notifications\Controllers;
 use Haseri\Backend\Modules\Notifications\Services\NotificationService;
 use Haseri\Backend\Shared\Helpers\Response;
 use Haseri\Backend\Shared\Exceptions\HttpException;
-
+#notification controllers
 class NotificationController
 {
     private $service;
