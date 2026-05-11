@@ -1,6 +1,8 @@
 <?php
 namespace Haseri\Backend\Modules\Jobs\Services;
 
+
+#jop application is done  application  api
 use Haseri\Backend\Shared\Models\JobApplication;
 use Haseri\Backend\Shared\Models\Job;
 use Haseri\Backend\Shared\Models\Notification;
