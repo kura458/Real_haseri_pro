@@ -1,6 +1,7 @@
 <?php
 namespace Haseri\Backend\Modules\Technician\Services;
 
+#verification  serfice for  techcian to verifes them using national id and workprof document
 use Haseri\Backend\Shared\Models\TechnicianVerification;
 use Haseri\Backend\Shared\Models\User;
 use Haseri\Backend\Shared\Helpers\Upload\ImageUploader;
