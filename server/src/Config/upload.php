@@ -11,3 +11,5 @@ return [
          'covers' => 'storage/uploads/covers/',
     ],
 ];
+
+#upload document configration
