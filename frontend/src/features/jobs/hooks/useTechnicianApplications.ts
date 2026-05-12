@@ -1,5 +1,6 @@
 "use client";
 
+// Display submitted reviews and average rating on the technician profile page
 import { useState, useCallback } from "react";
 import { jobsApi } from "../services";
 import type { JobApplication } from "../types";
