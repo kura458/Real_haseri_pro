@@ -1,4 +1,8 @@
 <?php
+
+
+// these routes are for reviews module, they will be included in the main router
+
 use Haseri\Backend\Modules\Reviews\Controllers\ReviewController;
 use Haseri\Backend\Modules\Auth\Middleware\AuthMiddleware;
 use Haseri\Backend\Shared\Helpers\Response;
