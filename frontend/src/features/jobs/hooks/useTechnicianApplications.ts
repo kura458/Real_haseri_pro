@@ -1,6 +1,6 @@
 "use client";
 
-// Display submitted reviews and average rating on the technician profile page
+// Display submitted reviews and average rating on the technician profile page so that customers can make informed decisions when hiring technicians. This will include fetching reviews from the backend and calculating the average rating to display prominently on the profile.
 import { useState, useCallback } from "react";
 import { jobsApi } from "../services";
 import type { JobApplication } from "../types";
