@@ -5,6 +5,7 @@ use Haseri\Backend\Modules\Admin\Services\UserManagementService;
 use Haseri\Backend\Shared\Helpers\Response;
 use Haseri\Backend\Shared\Exceptions\HttpException;
 
+#user managemnts  
 class UserManagementController
 {
     private $service;
