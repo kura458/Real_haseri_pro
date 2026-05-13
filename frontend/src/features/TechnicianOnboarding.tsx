@@ -1,5 +1,6 @@
 "use client";
 
+// these will include Build frontend UI for customers to rate technicians (1–5 stars + review) with validation and error handling
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { Container, Section, Heading, LoadingSpinner } from "@/src/features/shared/components";
 import {
