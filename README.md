@@ -2,6 +2,16 @@
 
 HASERI is a full-stack marketplace concept that helps people discover local service providers and connect with them. The project is designed around the needs of customers and service providers in Ethiopia.
 
+## Project visuals
+
+The frontend repository includes these visual assets:
+
+| Homepage hero visual | Authentication visual |
+|---|---|
+| ![HASERI homepage hero visual](frontend/public/images/hero.png) | ![HASERI authentication visual](frontend/public/images/auth-side.png) |
+
+These are existing frontend image assets, not independently captured application screenshots. A future update can add full-page or workflow screenshots from a running build.
+
 ## Core capabilities
 
 - Discover local services and providers
@@ -23,7 +33,7 @@ HASERI is a full-stack marketplace concept that helps people discover local serv
 
 ## Project status
 
-HASERI is an evolving software engineering project. Feature availability and setup details may change as development continues. Check the source folders and project configuration before deploying.
+HASERI is an evolving team software engineering project. Feature availability and setup details may change as development continues. Check the source folders and project configuration before deploying.
 
 ## Getting started
 
@@ -47,4 +57,5 @@ HASERI is an evolving software engineering project. Feature availability and set
 Developed as a software engineering project by a team of students. The repository is maintained under [kura458](https://github.com/kura458).
 
 ---
+
 *Building useful local-service technology, one iteration at a time.*
